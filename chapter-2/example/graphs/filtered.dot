@@ -1,0 +1,8 @@
+digraph Modules {
+    "./package.json" [fillcolor=black,fontcolor=white,style=filled];
+    "./index.js" -> "./lib/static.js";
+    "./index.js" -> "./lib/dynamic.js";
+    "./index.js" -> "./lib/opt2.js";
+    "./index.js" -> "./lib/lazy.js";
+    "./package.json" -> "./index.js";
+}

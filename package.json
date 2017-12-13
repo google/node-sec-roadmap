@@ -1,0 +1,28 @@
+{
+  "version": "1.0.0",
+  "name": "@mikesamuel/nodejs_sec_book",
+  "description": "Booklet about NodeJS in organizations with large security profiles",
+  "homepage": "https://github.com/google/node-sec-roadmap/",
+  "license": "(Apache License 2.0 OR CC-BY-4.0)",
+  "author": {
+    "name": "Mike Samuel",
+    "email": "mikesamuel@gmail.com",
+    "url": "https://github.com/mikesamuel"
+  },
+  "files": [
+    "*.md"
+  ],
+  "main": "README.md",
+  "dependencies": {
+    "gitbook": ">=3.2.3",
+    "gitbook-cli": ">=2.3.2",
+    "gitbook-plugin-ga": "^1.0.1",
+    "gitbook-plugin-links": "^3.0.1",
+    "svgexport": "^0.3.2"
+  },
+  "private": true,
+  "scripts": {
+    "start": "make serve",
+    "postinstall": "make book"
+  }
+}

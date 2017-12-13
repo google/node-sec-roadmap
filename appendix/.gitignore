@@ -1,0 +1,4 @@
+node_modules/**
+separate-modules/**
+**~
+**.pyc

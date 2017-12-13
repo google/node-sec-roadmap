@@ -1,0 +1,17 @@
+{
+    "name": "sh-template-tag",
+    "description": "demonstrates tagged templates for safely composing shell strings",
+    "version": "0.0.0",
+    "main": "index.js",
+    "dependencies": {
+    },
+    "scripts": {
+        "test": "./node_modules/.bin/mocha"
+    },
+    "author": "Mike Samuel",
+    "license": "Apache-2.0",
+    "devDependencies": {
+        "chai": ">=4.1.2",
+        "mocha": ">=4.0.1"
+    }
+}

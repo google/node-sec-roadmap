@@ -1,0 +1,14 @@
+{
+  "name": "webpack-compat-experiment",
+  "description": "Figuring out how well webpack deals with dynamic loads",
+  "version": "0.0.0",
+  "main": "index.js",
+  "dependencies": {},
+  "scripts": {},
+  "author": "Mike Samuel",
+  "license": "Apache-2.0",
+  "greeting": "hello",
+  "devDependencies": {
+    "webpack": "^3.10.0"
+  }
+}

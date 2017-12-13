@@ -1,0 +1,15 @@
+{
+    "name": "dynamism-example",
+    "private": true,
+    "description": "Example code that shows dynamically walking the test graph",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo $NODE; ./node_modules/.bin/mocha"
+    },
+    "author": "Mike Samuel",
+    "license": "Apache-2.0",
+    "devDependencies": {
+        "chai": ">=4.1.2",
+        "mocha": ">=4.0.1"
+    }
+}

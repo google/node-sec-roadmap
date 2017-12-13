@@ -1,0 +1,18 @@
+{
+    "name": "mysql-tag",
+    "description": "demonstrates tagged templates for safely composing SQL",
+    "version": "0.0.0",
+    "main": "index.js",
+    "dependencies": {
+        "mysql": "2.15.0"
+    },
+    "scripts": {
+        "test": "TZ=GMT ./node_modules/.bin/mocha"
+    },
+    "author": "Mike Samuel",
+    "license": "Apache-2.0",
+    "devDependencies": {
+        "chai": ">=4.1.2",
+        "mocha": ">=4.0.1"
+    }
+}
