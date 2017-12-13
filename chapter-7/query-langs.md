@@ -82,7 +82,7 @@ We can tweak SQL APIs so that, when used as template literal tags,
 they escape the dynamic parts to preserve the intent of the author of
 the static parts, and then re-interleave them to produce the query.
 
-The example code accompanying this chapter (TODO: link),
+The [example code][sql-code] accompanying this chapter
 implements this idea by defining a `mysql.sql` function that
 parses the static part to choose appropriate escapers for the
 dynamic parts.
@@ -150,3 +150,4 @@ connection.query('SELECT * FROM T WHERE x = "?"', x, callback)  // Subtly broken
 [QUI]: ../chapter-1/threat-QUI.md
 [prepared statements]: https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet#Defense_Option_1:_Prepared_Statements_.28with_Parameterized_Queries.29
 [tagged template literal]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals
+[sql-code]: https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sql

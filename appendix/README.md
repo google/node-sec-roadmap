@@ -94,6 +94,8 @@ be feasible.
 
 ## Methodology
 
+The code is available on [Github](https://github.com/google/node-sec-roadmap/tree/master/appendix).
+
 ```bash
 $ npm --version
 3.10.10

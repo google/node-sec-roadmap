@@ -94,8 +94,8 @@ inputs.
 The primary vector for this vulnerability is dynamic code loading:
 calling `require(...)` with an argument other than a literal string.
 
-To assess the severity of this issue, we examine the 108 most popular
-npm modules.  TODO: link to experiments
+To assess the severity of this issue, we [examined](../appendix/README.md)
+the 108 most popular npm modules.
 
 34 of the top 108 most popular npm modules (30%) call `require(...)`
 without a literal string argument or have a non-test dependency that

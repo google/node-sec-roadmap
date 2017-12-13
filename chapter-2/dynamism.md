@@ -161,6 +161,11 @@ great way to do things, but solving security problems only for teams
 with development practices mature enough to deploy via webpack risks
 preaching to the choir.
 
+Webpack, in its minimal configuration, does not attempt to skip
+test files ([experiment code][webpack-experiment]).
+Teams with an experienced webpack user can use it to great effect, but
+it is not an out-of-the-box solution.
+
 Webpacking does not prevent calls to `require(...)` with unintended
 arguments, but greatly reduces the chance that they will load
 non-production code.  As long as the server process cannot read
@@ -168,11 +173,6 @@ JS files other than those in the bundle, then a webpacked server
 is safe from [UIR][].  This may not be the case if the production
 machine has npm modules globally installed, and the server process
 is not running in a [chroot jail][].
-
-Webpack, in its minimal configuration, does not attempt to skip
-test files.  Teams with an experienced webpack user can use it
-to great effect, but it is not an out-of-the-box solution.
-TODO: link to experiment
 
 
 ## A Possible Solution
@@ -214,3 +214,4 @@ We propose these changes:
 [nodemon]: https://nodemon.io/
 [import-op-strawman]: https://github.com/tc39/proposal-dynamic-import
 [chroot jail]: https://help.ubuntu.com/community/BasicChroot
+[webpack-experiment]: https://github.com/google/node-sec-roadmap/tree/master/chapter-2/experiments/webpack-compat
