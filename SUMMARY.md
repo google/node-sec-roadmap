@@ -32,5 +32,5 @@
 
 *  [Appendix: Experiments](appendix/README.md)
 *  [Contributors](CONTRIBUTORS.md)
-*  [Errata](https://github.com/google/node-sec-roadmap/issues)
 *  [License](license.md)
+*  [Errata](https://github.com/google/node-sec-roadmap/issues)
