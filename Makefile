@@ -14,7 +14,7 @@ ifeq ($(CALIBER_HOME),)
 endif
 
 book.json : book.json.withcomments
-	@cat book.json.withcomments | perl -ne 'print unless m/^\s*#/' > book.json
+	@cat book.json.withcomments | perl -ne 'print unless m/^[ \t]*#/' > book.json
 
 book : gitbook_out/.tstamp check
 
@@ -41,7 +41,9 @@ check :
 
 serve : book
 	"${ROOT_DIR}"/node_modules/.bin/gitbook serve
-#	pushd gitbook_out; python -m SimpleHTTPServer 8000; popd
+
+serve_static_files : book
+	pushd gitbook_out; python -m SimpleHTTPServer 4000; popd
 
 clean :
 	rm -rf gitbook_out/ book.pdf _book book.json
