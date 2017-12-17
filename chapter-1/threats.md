@@ -53,11 +53,10 @@ browser.
 ## Classes of Threats {#threat_table}
 
 The table below lists broad classes of vulnerabilities, and for each,
-a short identifier which appears later in these documents.
-This is not meant to be a comprehensive risk, but we should be
-confident in a security assessment that accounts for all these risks,
-and we should have low confidence in any assessment that skips many
-of these.
+a short identifier by which we refer to the class later in this
+document.  This list is not meant to be a comprehensive, but we expect
+that a thorough security assessment would touch on most of these and
+would have low confidence in an assessment that skips many.
 
 The frequency and severity of vulnerabilities are guesstimates since
 we have little hard data on the frequency of these in Node.js
