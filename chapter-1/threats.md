@@ -15,9 +15,9 @@ environment for server-side JavaScript is quite different from that for
 client-side JavaScript.  For example,
 
 * Client-side JavaScript runs in the context of the [same-origin policy][]
-  possibly with a [Content-Security-Policy][] which govern which code can load.
-  Server-side JavaScript **code loading** is typically constrained by the files
-  on the server, and the values that can reach `require(...)`, `eval(...)`
+  possibly with a [Content-Security-Policy][] which governs which code can load.
+  Server-side JavaScript **code loading** is typically only constrained by the
+  files on the server, and the values that can reach `require(...)`, `eval(...)`
   and similar operators.
 * Client-side JavaScript typically only has access to data that the human
   using the browser should have access to.
@@ -28,7 +28,7 @@ client-side JavaScript.  For example,
   interaction
   (`<input type=file>`, `Content-disposition:attachment`), or can only access
   a directory dedicated to third-party content (browser cache, local storage)
-  which is not usually on a list like `$PATH`.
+  and which is not usually on a list like `$PATH`.
   On the server, the Node runtime process's privileges determine
   [file-system access][nodejs/fs].
 * Client-side JavaScript has no concept of a **shell** that converts
@@ -40,11 +40,11 @@ client-side JavaScript.  For example,
 * **Network messages** sent by server-side JavaScript originate inside
   the server's LAN, but those sent by client-side JavaScript typically do not.
 * **Shared memory concurrency** in client-side JavaScript happens via
-  well-known low-level APIs like `SharedArrayBuffer`.
+  well-understood APIs like `SharedArrayBuffer`.
   [Experimental modules][threads-a-gogo] and a [workers proposal][]
-  allow server-side JavaScript to fork threads; it is
-  [unclear][thread corner cases] how widespread these are in
-  production or how effective any isolation between memory spaces is.
+  allow server-side JavaScript to fork threads; it is unclear how
+  widespread these are in production or how
+  [susceptible][thread corner cases] these are to memory corruption.
 
 The threat environment for server-side JavaScript is much closer to
 that for any other server-side framework than JavaScript in the

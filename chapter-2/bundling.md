@@ -4,7 +4,7 @@ Consider a simple Node application:
 
 ```js
 // index.js
-// Example that tests various kinds of loads.
+// Example that uses various require(...) use cases.
 
 let staticLoad = require('./lib/static');
 function dynamicLoad(f, x) {
@@ -43,47 +43,54 @@ describe("My TestSuite", () => {
 });
 ```
 
-We hack `Module._load` to dump information about loads:
-```
+We hack `updateChildren`, which gets called by `Module._load` for new
+modules and when a module requires a cached module, to dump information
+about loads:
+
+```diff
 diff --git a/lib/module.js b/lib/module.js
-index cc8d5097bb..f676b90950 100644
+index cc8d5097bb..945ab8a4a8 100644
 --- a/lib/module.js
 +++ b/lib/module.js
-@@ -485,6 +485,16 @@ Module._load = function(request, parent, isMain) {
-     return NativeModule.require(filename);
-   }
+@@ -59,8 +59,18 @@ stat.cache = null;
 
-+  if (parent && parent.filename) {
-+    // HACK: rather than require('fs') to write a file out, we
-+    // log to the console.
-+    // We assume the prefix will be removed and the result wrapped in
-+    // a DOT digraph.
-+    console.log(
-+        'REQUIRE_LOG_DOT:    ' + JSON.stringify(parent.filename)
-+        + ' -> ' + JSON.stringify(filename) + ';');
+ function updateChildren(parent, child, scan) {
+   var children = parent && parent.children;
+-  if (children && !(scan && children.includes(child)))
++  if (children && !(scan && children.includes(child))) {
++    if (parent.filename && child.id) {
++      // HACK: rather than require('fs') to write a file out, we
++      // log to the console.
++      // We assume the prefix will be removed and the result wrapped in
++      // a DOT digraph.
++      console.log(
++          'REQUIRE_LOG_DOT:    ' + JSON.stringify(parent.filename)
++          + ' -> ' + JSON.stringify(child.id) + ';');
++    }
+     children.push(child);
 +  }
-+
-   // Don't call updateChildren(), Module constructor already does.
-   var module = new Module(filename, parent);
+ }
 ```
 
-Running the tests gives us a rather
-[hairy dependency graph](example/graphs/full.svg):
+Running the tests and extracting the graph ([code][extract-script])
+gives us a rather [hairy dependency graph](example/graphs/full.svg):
 
 <img title="Files loaded by `npm test`" src="example/graphs/full.svg" width=800 height=100>
 
-We add an edge from `"./package.json"` &rarr; `"./index.js"`, the
-package's main file.  Then we filter edges to include only those
-reachable from `"./package.json"`.
-This lets us distinguish files loaded by the test runner and tests.
+We add an edge from `"./package.json"` to the module's main file.
+Then we filter edges ([code][graph-filter]) to include only those
+reachable from `"./package.json"`.  This lets us distinguish files
+loaded by the test runner and tests from those loaded after control
+has entered an API in a production file.
+
 The resulting graph is much simpler:
 
 ![Production Source Files](example/graphs/filtered.svg)
 
 Note that the production file list includes dynamically and lazily
 loaded files.  It does include `./lib/opt2.js` but not `./lib/opt1.js`.
-The former file does not exist, so `index.js` tries and finds the
-latter.
+The former file does not exist, so the loop which picks the first
+available alternative tries and finds the latter.
 
 Our production source list should include all the files we need
 in production if
@@ -93,10 +100,9 @@ in production if
    in production via APIs defined in the main file or in APIs
    transitively loaded from there.
 
-It is definitely possible to miss some files.  If
-the unit test did not call `app.lazyLoad` then there
-would be no edge to `./lib/lazy.js`.
-To address this, developers can
+It is definitely possible to miss some files.  If the unit test did
+not call `app.lazyLoad` then there would be no edge to
+`./lib/lazy.js`.  To address this, developers can
 
 *  Expand test coverage to exercise code paths that load the
    missing source files.
@@ -117,3 +123,6 @@ readily apparent, so this replaces
 with
 
 *  easy-to-detect bugs with negligible security consequences.
+
+[extract-script]: https://github.com/google/node-sec-roadmap/blob/master/chapter-2/example/make_dep_graph.sh
+[graph-filter]: https://github.com/google/node-sec-roadmap/blob/6130b76446ff4efbb276d8128c12e41ea2fffbc9/chapter-2/example/make_dep_graph.sh#L39-L73

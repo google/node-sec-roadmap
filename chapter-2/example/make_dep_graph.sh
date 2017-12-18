@@ -28,7 +28,7 @@ mkdir -p graphs
     NODE=/Users/msamuel/work/node/out/Release/node \
     PATH="/Users/msamuel/work/node/out/Release/:$PATH" \
     ./node_modules/.bin/mocha 2>&1 \
-    | perl -ne 's/"$ENV{PWD}/"./g; print $_ if s/^REQUIRE_LOG_DOT://'
+    | perl -ne 's/"$ENV{PWD}/"./g; if (s/^REQUIRE_LOG_DOT://) { print $_; } else { print STDERR $_; }'
 
     # Add an edge from package.json to the main module.
     echo '    "./package.json" -> "./index.js";'

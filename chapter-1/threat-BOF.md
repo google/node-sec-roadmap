@@ -9,14 +9,14 @@ an output.
 
 Buffer overflow vectors in Node.js are:
 
-*  The Node.js runtime + dependencies like the JS runtime, OpenSSL
+*  The Node.js runtime and dependencies like the JS runtime and OpenSSL
 *  [C++ addons][] third-party modules that use N-API (the native API).
 *  Child processes.  For example, code may route a request body to an
    [image processing library][imagetragick] that was not written with
    untrusted inputs in mind.
 
 Buffer overflows are common, but we class them as low frequency for
-Node.js since the runtime is highly reviewed codebase compared to the
+Node.js in particular.  The runtime is highly reviewed compared to the
 average C++ backend; C++ addons are a small subset of third-party
 modules; and there's no reason to believe that child processes spawned
 by Node.js applications are especially risky.

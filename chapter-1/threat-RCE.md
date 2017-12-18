@@ -5,8 +5,11 @@ untrustworthy string as code.  When `x` is a string, `eval(x)`,
 `setTimeout(x, 0)`, `Function(x)`, and `vm.runIn*Context(x)` all
 invoke the JavaScript engine's parser on `x`.  If an attacker controls
 `x` then they can run arbitrary code in the context of the CommonJS
-module or `vm` context that invoked the parser.  Even sandboxed
-operators often have [known workarounds][denicola-vm-run].
+module or `vm` context that invoked the parser.
+
+Sandboxing can help but widely available sandboxes have
+[known workarounds][denicola-vm-run] though there is
+[hope][frozen realms].
 
 It is harder to execute remote code in server-side JavaScript.
 `this[x][y] = "javascript:console.log(1)"` does not cause code to
@@ -23,7 +26,7 @@ do something else when given a `Function` instance.
    This analysis works on most modules, but fails to distinguish
    safe uses of `setTimeout` for example from unsafe.
 *  A [type based analysis](../appendix/README.md#jsconf) can
-   distinguish between those two, but existing tools don't
+   distinguish between those two, but the tools we tested don't
    deal well with mixed JavaScript and TypeScript inputs.
 
 Even if we could reliably identify places where strings are
@@ -33,24 +36,54 @@ code does not *implicitly* invoke a parser than in other
 common backend languages.
 
 ```js
+// Let x be any value not in
+// (null, undefined, Object.create(null)).
 var x = {},
-    a = '__proto__',
+// If the attacker can control three strings
+    a = 'constructor',
     b = 'constructor',
-    c = '__proto__',
-    d = 'constructor',
     s = 'console.log(s)';
-x[a][b][c][d](s)();
+// and trick code into doing two property lookups
+// they control, a call with a string they control,
+// and one more call with any argument
+x[a][b](s)();
+// then they can cause any side-effect achievable
+// solely via objects reachable from the global scope.
+// This includes full access to any exported module APIs,
+// all declarations in the current module, and access
+// to builtin modules like child_process, fs, and net.
 ```
 
-Uses of `eval` can be easily found in JavaScript, Python, PHP, and
-Ruby code, but in JavaScript a series of square brackets with keys
-controlled by an attacker allows access to an `eval`-like operator.
+Filtering out values of `s` that "look like JavaScript" as they reach
+server-side code will probably not prevent code execution.  Yosuke
+Hasegawa [showed][Yosuke] how to reencode arbitrary JavaScript using
+only 6 punctuation characters, and that number will [fall to 5][Masato]
+if the `|>` operator proposal succeeds.
+["Web Application Obfuscation"][] by Heiderich et al. catalogues ways
+to bypass filtering.
 
-It's possible in [dynamically compile][dynjava] strings even in
-statically compiled languages but it is far easier for a developer to
-write a parser for a domain-specific language with at least some
-isolation from the larger app so attacker-controlled strings reach
-compilers much less frequently.
+`eval` also allows remote-code execution in Python, PHP, and
+Ruby code, but in those languages `eval` operators are harder to
+mention implicitly which means uses are easier to check.
+
+It is possible to dynamically evaluate strings even in statically
+compiled languages, for example, [JSR 223][] and
+[`javax.compiler`][dynjava] for Java.  In statically compiled
+languages there is no short implicit path to `eval` and it is not
+easier to `eval` an untrusted input than to use an intepreter that is
+isolated from the host environment.
+
+We consider remote code execution in Node.js lower frequency than for
+client-side JavaScript without a Content-Security-Policy but higher
+than for other backend languages.  We consider the severity the same
+as for other backend languages.  The serverity is higher than for
+client-side JavaScript because backend code often has access to more
+than one user's data and privileged access to other backends.
 
 [denicola-vm-run]: https://gist.github.com/domenic/d15dfd8f06ae5d1109b0
+[frozen realms]: https://github.com/tc39/proposal-frozen-realms
+[Yosuke]: https://news.ycombinator.com/item?id=4370098
+[Masato]: https://syllab.fr/projets/experiments/xcharsjs/5chars.pipeline.html
+["Web Application Obfuscation"]: https://www.amazon.com/Web-Application-Obfuscation-Evasion-Filters/dp/1597496049
+[JSR 223]: https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/prog_guide/api.html
 [dynjava]: https://www.ibm.com/developerworks/library/j-jcomp/index.html

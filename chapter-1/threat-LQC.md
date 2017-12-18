@@ -1,7 +1,7 @@
 # Low Quality Code
 
 An application or service is vulnerable when its security depends on a
-third-party library upholding a contract which it does not uphold.
+module upholding a contract that it does not uphold.
 
 Most new software has bugs when first released.  Over time, maintainers
 fix the bugs that have obvious, bad consequences.

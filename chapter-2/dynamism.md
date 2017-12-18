@@ -52,7 +52,7 @@ like the following:
        });
     const serviceProvider = require(serviceProviderName);
     ```
-*   Taking advantage of an optional dependency if it is available.
+*   Taking advantage of an optional dependency when it is available.
     ```js
     let optionalDependency = null;
     try {
@@ -80,9 +80,6 @@ like the following:
     ```js
     const version = require('./package.json').version;
     ```
-
-`require` could load the output of code generators by synthesizing a
-`package.json` but this doesn't seem to be common in practice.
 
 During rapid development, [file-system monitors][nodemon] can restart
 a node project when source files change, and the application stitches
@@ -112,9 +109,9 @@ production and which are test would either:
    but also for deep dependencies with which they are unfamiliar
    leading to poor developer experience.
 *  Whitelist without scrutiny leading to the original security problem.
-*  Lead them to not use modules to solve problems and instead roll their
-   own leading to poor developer experience, and possibly additional
-   security problems.
+*  Lead them to not use available modules to solve problems and instead
+   roll their own leading to poor developer experience, and possibly
+   [LQC][] problems.
 
 We need to ensure that only source code written with production
 constraints in mind loads in production without increasing the burden
@@ -128,7 +125,7 @@ to poor developer experience and lower quality code.
 
 ## Success Criteria
 
-We would successfully address abuse of `require` if
+We would have prevented abuse of `require` if:
 
 *  Untrusted inputs could not cause `require` to load a
    non-production source file,
@@ -136,8 +133,8 @@ We would successfully address abuse of `require` if
    `require`,
 *  and/or loading a non-production source file has no adverse effect.
 
-and we would successfully prevent abuse of `eval`, `new Function`
-and related operators if
+We would have successfully prevented abuse of `eval`, `new Function`
+and related operators if:
 
 *  Untrusted inputs cannot reach an `eval` operator,
 *  and/or untrusted inputs that reach them cause no adverse affects,
@@ -148,8 +145,7 @@ and related operators if
 In both cases, converting dynamic operators to static before untrusted
 inputs reach the system reduces the attack surface.  Requiring
 large-scale changes to existing npm modules or requiring large scale
-rewrites of code that uses using them constitutes a failure per
-[DEX][].
+rewrites of code that uses using them constitutes compromises [DEX][].
 
 
 ## Current practices
@@ -201,6 +197,7 @@ We propose these changes:
       [allow uses of `eval`](bounded-eval.md) by approved modules.
 
 [DEX]: ../chapter-1/threat-DEX.md
+[LQC]: ../chapter-1/threat-LQC.md
 [RCE]: ../chapter-1/threat-RCE.md
 [UIR]: ../chapter-1/threat-UIR.md
 [webpack]: https://webpack.js.org/

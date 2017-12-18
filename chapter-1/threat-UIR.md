@@ -25,8 +25,9 @@ do production code and ought not have to.
 
 This vulnerability may be novel to CommonJS-based module linking
 (though [we are not the first to report it][prior art]) so we discuss it in
-more depth than other classes of vulnerability.  Our frequency /
+more depth than other classes of vulnerability.  Our frequency and
 severity guesstimates have a high level of uncertainty.
+
 
 ## Dynamic `require()` can load non-production code
 
@@ -62,32 +63,35 @@ example code for most projects.
 We need to keep test code from loading in production.
 
 Good developers do and should be able to do things in test code that
-would be terrible ideas in production code:
+would be terrible ideas in production code.  It is not uncommon to
+find in test code that:
 
--  Change global configuration so that they can run tests under
+-  changes global configuration so that they can run tests under
    multiple different configurations.
--  Provide methods that intentionally break abstractions so they
+-  defines methods that intentionally break abstractions so they
    can test how gracefully production code deals with marginal inputs.
--  Parse test cases specified in strings and pass parts onto powerful
+-  parses test cases specified in strings and pass parts onto powerful
    reflective operators and `eval`-like operators.
--  `require` modules specified in test case strings so they can
+-  `require`s modules specified in test case strings so they can
    run test cases in the context of plugins.
--  Break private/public API distinctions to better interrogate
+-  breaks private/public API distinctions to better interrogate
    internals.
--  Disable security checks so they can test how gracefully
+-  disables security checks so they can test how gracefully
    a subcomponent handles dodgy inputs.
--  Call directly into lower-level APIs that assume that higher
+-  calls directly into lower-level APIs that assume that higher
    layers checked inputs and enforced access controls.
--  Include in output internal state to aid a developer in tracking
-   down the root cause of a test failure.
--  Log or include in output information that would be sensitive
+-  includes in output sensitive internal state (like PRNG seeds) to
+   aid a developer in reproducing or tracking down the root cause of
+   a test failure.
+-  logs or include in output information that would be sensitive
    if the code connected to real user data instead of a test database.
--  Reset PRNG seeds to fixed values to make it easier to reproduce
+-  resets PRNG seeds to fixed values to make it easier to reproduce
    test failures.
+-  adds additional "God mode" request handlers that allow a developer
+   to interactively debug a test server.
 
-These things are reasonable to do during testing when the systems are
-not connected to real user data, and/or are not exposed to untrusted
-inputs.
+These are not security problems when test environments neither access
+real user data nor receive untrusted inputs.
 
 ## Unintended Require can activate non-production code
 
@@ -104,14 +108,14 @@ code.  If we assume, conservatively, that uses of `require` that are
 not immediate calls are dynamic load vectors, then the proportion
 rises to 50%.  See [appendix](../appendix/README.md#dynamic_load).
 
-Finding exploitable dynamic loads among the long tail of less widely
-used modules without a high false-positive rate will be difficult.
-
 Below are the results of a manual human review of dynamic loads in
 popular npm modules.  There seem to be few clear vulnerabilities among
 the top 108 modules, but the kind of reasoning required to check this
 is not automatable; note the use of phrases like "developers probably
 won't" and "the module is typically used to".
+
+Determining which dynamic loads are safe among the long tail of less
+widely used modules would be difficult.
 
 ----
 
@@ -140,7 +144,7 @@ if (parser) {
 
 This looks in an options object for a module identifier.  It's
 unlikely that this particular code in babel is exploitable since
-developers probably won't let untrusted input specify parser options.
+developers probably won't let untrusted inputs specify parser options.
 
 The popular [colors:1.1.2][colors dyn load] module treats the argument
 to `setTheme` as a module identifier.
@@ -156,6 +160,8 @@ This is unlikely to be a problem since the module is typically used to
 colorize console output.  HTTP response handling code will probably
 not load `colors` so an untrusted input will probably not reach
 `colors.setTheme`.
+If an attacker can control the argument to `setTheme` then they can
+load an arbitrary JavaScript source file or C++ addon.
 
 The popular [browserlist][browserlist dyn load] module takes part
 of a query string and treats it as a module name:
@@ -170,11 +176,13 @@ of a query string and treats it as a module name:
 ```
 
 Hopefully browser list queries are not specified by untrusted inputs, but
-if they are, an attacker can load arbitrary available source files.
+if they are, an attacker can load arbitrary available source files since
+`/(.+)$/` will match any module identifier.
 
-If express views are lazily initialized based on a portion of the
-request path without first checking that the path should have a view
-associated, then the [following code][express dyn load] runs:
+The popular express framework loads file-extension-specific code
+as needed.  If express views are lazily initialized based on a portion
+of the request path without first checking that the path should have a
+view associated, then the [following code][express dyn load] runs:
 
 ```js
 if (!opts.engines[this.ext]) {
@@ -190,7 +198,12 @@ This would seem to allow loading top-level modules by requesting a
 view name like `foo.toplevelmodule`, though not local source files
 whose identifiers must contain `.` and `/`.  Loading top-level modules
 does not, by itself, allow loading non-production code, so this is
-probably not vulnerable to this attack.
+probably not vulnerable to this attack.  It may be possible to use a
+path like `/base.\foo\bar` to cause `mod = "\\foo\\bar"` which may
+allow arbitrary source files on Windows, but it would only allow
+loading the module for initialization side effects unless it
+coincidentally provides significant abusable authority under
+`exports.__express`.
 
 ----
 
@@ -198,12 +211,13 @@ This analysis suggests that the potential for exploiting unintended
 require is low in projects that only use the 100 most popular modules,
 but the number and variety of dynamic `require()` calls in the top 108
 modules suggests potential for exploitable cases in the top 1000
-modules.
+modules, and we know of no way to automatically vet modules for UIR
+vulnerabilities.
 
 ## Unintended require can leak information
 
-[Arnaboldi][diff fuzz] shows that unintended requires can leak sensitive
-information if attackers have access to error messages.
+[Fernando Arnaboldi][diff fuzz] showed that unintended requires can
+leak sensitive information if attackers have access to error messages.
 
 > ```sh
 > # node -e

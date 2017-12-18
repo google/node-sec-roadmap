@@ -1,7 +1,7 @@
 # Statically eliminating `eval`
 
 Pug provides a flexible API to load Pug templates from `.pug` files
-that [`eval`s the generated code][pug-eval],
+that `eval`s the generated code ([code][pug-eval]),
 and a command line interface for precompiling Pug files.
 
 Let's ignore those and imagine ways to allow a Pug user to
@@ -19,8 +19,9 @@ html
     ...`;
 ```
 
-This code snippet uses a [tagged template literal][] to allow Pug
-template code to appear inline in a JavaScript file.
+This code snippet uses a tagged template literal
+([docs][tagged template literal]) to allow Pug template code to appear
+inline in a JavaScript file.
 
 Rather than loading a `.pug` file, we have declared it in JavaScript.
 
@@ -42,10 +43,11 @@ module loader to create a module with the content between
 loaded.  If a module is already in the cache, `Module` skips the
 additional content checks.
 
-[`makeRequireFunction`][] defines a `require` for each module
-that loads modules with the current module as the parent.
-That would also have to define a module specific `require.synthesize`
-that does something like:
+The Node runtime function, `makeRequireFunction`
+([code][makeRequireFunction]), defines a `require` for each module
+that loads modules with the current module as the parent.  That would
+also have to define a module specific `require.synthesize` that does
+something like:
 
 ```js
   function synthesize(content) {
@@ -91,8 +93,8 @@ tools can check.
 This scheme, might be more discoverable if code generator authors
 adopted some conventions:
 
-*  If a module defines `exports.lang` it should be usable with
-   tagged template
+*  If a module defines `exports.lang` it should be usable as a
+   template tag.
 *  If that same function is called with an option map instead
    of as a template tag function, then it should return a function
    to enable usages like
@@ -114,16 +116,17 @@ discussing [library tweaks][library].
 This proposal has one major drawback: we still have to trust the code
 generator.  Pug's code generator looks well structured, but reasoning
 about all the code produced by a code generator is harder than
-reasoning about one hand-written module.  The [frozen realms][] proposal
-restricts code to a provided API like `vm.runInNewContext` aimed to.
-If Pug, for example, chose to load its code in a sandbox, then
-checking just the provided context would give us confidence about what
-generated code could do.  In some cases, we might be able to move code
-generator entirely outside the ["trusted computing base."][TCB]
+reasoning about one hand-written module.  The frozen realms proposal
+([spec][frozen realms]) restricts code to a provided API like
+`vm.runInNewContext` aimed to.  If Pug, for example, chose to load its
+code in a sandbox, then checking just the provided context would give
+us confidence about what generated code could do.  In some cases, we
+might be able to move code generator entirely outside the "trusted
+computing base" ([definition][TCB]).
 
 [tagged template literal]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals
 [pug-eval]: https://github.com/pugjs/pug/blob/926f7c720112cac76cfedb003e25e9f43d3a1767/packages/pug/lib/index.js#L261-L263
 [library]: ../chapter-7/libraries.md
-[`makeRequireFunction`]: https://github.com/nodejs/node/blob/8f5040771475ca5435b6cb78ab2ebce7447afcc1/lib/internal/module.js#L5
+[makeRequireFunction]: https://github.com/nodejs/node/blob/8f5040771475ca5435b6cb78ab2ebce7447afcc1/lib/internal/module.js#L5
 [frozen realms]: https://github.com/tc39/proposal-frozen-realms
 [TCB]: https://en.wikipedia.org/wiki/Trusted_computing_base

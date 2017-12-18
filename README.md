@@ -17,22 +17,21 @@ who have worked to make it easier to write secure, robust software on
 other platforms; who like much about Node.js; and who would like to
 help make it better.
 
+Our intended audience is Node.js library and infrastructure
+maintainers who want to stay ahead of the increased scrutiny that
+Node.js is getting from attackers.  We have not researched whether,
+and do not assert that, any stack is inherently more or less secure
+than any other.
+
 Node.js security is especially important for “primary targets”.
 Targets are often subdivided into "primary targets" and "targets of
 opportunity."  One attacks the latter if one happens to see a
 vulnerability.  One goes out of their way to find vulnerabilities in
 the former.  The practices which prevent one from becoming a target of
 opportunity might not be enough if one is a primary target of an actor
-with resources at their disposal.  Organized, collective efforts to
-secure open-source Node.js code allows primary targets to defeat
-attacks; targets of opportunity become rare and the entire ecosystem
-is more secure.
-
-Our intended audience is Node.js library and infrastructure
-maintainers who want to stay ahead of the increased scrutiny that
-Node.js is getting from attackers.  We have not researched whether,
-and do not assert that, any stack is inherently more or less secure
-than any other.
+with resources at their disposal.  We hope that the ideas we present
+would help primary targets to defeat attacks while making targets of
+opportunity become rare and the entire ecosystem more secure.
 
 When addressing threats, we want to make sure we preserve Node.js's
 strengths.
@@ -49,12 +48,12 @@ strengths.
 *  Using JavaScript on the front and back ends of Web applications
    allows developers to work both sides when need be.
 
-We will break down the Roadmap as follows:
+The individual chapters are largely independent of one another:
 
 "[Threat environment][]" discusses the kinds of threats that concern us.
 
 "[Dynamism when you need it][]" discusses how to preserve the power of
-CommonJS module linking, Node contexts, and runtime code generation
+CommonJS module linking, `vm` contexts, and runtime code generation
 while making sure that, in production, only code that the development
 team trusts gets run.
 

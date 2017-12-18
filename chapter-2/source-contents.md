@@ -23,13 +23,14 @@ is on a list of production sources.
 The entire process looks like:
 
 1.  Developer develops and tests their app iteratively as normal.
-2.  The developer generates a bundle via the dynamic scheme
-    outlined above, a static tool like webpack, or some combination.
+2.  The developer generates a list of production sources via the
+    dynamic bundling scheme outlined earlier, a static tool like
+    webpack, or some combination.
 3.  The bundling tool generates a file with a cryptographic hash
     for each production source.
     We prefer hashing to checking paths for reasons that will become
     apparent later when we discuss `eval`.
-4.  The bundle and the hashes are copied to a production server.
+4.  A deploy script copies the bundle and the hashes to a production server.
 5.  The server startup script passes a flag to `node` or `npm start`
     telling the runtime where to look for the production source hashes.
 6.  The runtime reads the hashes and combines it with any hashes necessary

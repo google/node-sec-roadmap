@@ -26,9 +26,11 @@ prettyPlease.mayI(
 exports.compile = compile;
 ```
 
-The `prettyPlease` module cannot be pure JavaScript since only
-C++ can take advantage of [CodeGeneration callbacks][] the way
-[CSP does][CSP callback] on the client, but the definition would be roughly:
+The `prettyPlease` module cannot be pure JavaScript since only the
+C++ linker can take advantage of *CodeGeneration* callbacks
+([code][CodeGeneration callbacks]) the way CSP does
+([code][CSP callback]) on the client, but the definition would be
+roughly:
 
 ```js
 // prettyPlease module
@@ -117,14 +119,15 @@ C++ can take advantage of [CodeGeneration callbacks][] the way
 and the `eval` operators would check that their argument is in the global
 set.
 
-As long as we can prevent reflective access to `evalPermissions`
-we have constrained what can be `eval`ed.
-If `evalPermission` is a function parameter, then only `arguments`
+Implicit access to `eval` is possible because reflective operators can
+reach `eval`.  As long as we can prevent reflective access to
+`evalPermissions` we can constrain what can be `eval`ed.  If
+`evalPermission` is a function parameter, then only `arguments`
 aliases it, so functions that do not mention the special name
-`arguments` may safely receive one.
-Most functions do not.
-Before whitelisting a module, a reviewer would be wise to check for
-any use of `arguments`, and for any escape of permissions or `module`.
+`arguments` may safely receive one.  Most functions do not mention
+`arguments`.  Before whitelisting a module, a reviewer would be wise
+to check for any use of `arguments`, and for any escape of permissions
+or `module`.
 
 `evalPermission` is an opaque token --- only its reference identity
 is significant, so we can check membership in a `WeakSet` without

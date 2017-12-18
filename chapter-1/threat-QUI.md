@@ -11,8 +11,8 @@ connection.query(
 ```
 
 If an attacker controls value, and can cause it to contain a single
-quote, they can cause a different structure.  For example, if they
-can cause
+quote, they can cause execution of a querya with  different structure.
+For example, if they can cause
 
 ```js
 value = ' " OR 1 -- two dashes start a line comment';
@@ -31,11 +31,17 @@ that seems to only read data:
 value = '"; INSERT INTO Table ...  --'
 ```
 
-can violate system integrity by forging records, or deny service via
-mass deletes.
+can violate system integrity by forging records:
 
-Query injection has a [long and storied history][in the wild].
+```js
+' SELECT * FROM Table WHERE key="' + value + '" ' ===
+' SELECT * FROM Table WHERE key=""; INSERT INTO Table ... --" '
+```
+
+or deny service via mass deletes.
+
+Query injection has a [long and storied history][hall-of-shame].
 
 [Query injection]: http://bobby-tables.com/
-[in the wild]: http://codecurmudgeon.com/wp/sql-injection-hall-of-shame/
+[hall-of-shame]: http://codecurmudgeon.com/wp/sql-injection-hall-of-shame/
 [spp]: https://rawgit.com/mikesamuel/sanitized-jquery-templates/trunk/safetemplate.html#structure_preservation_property

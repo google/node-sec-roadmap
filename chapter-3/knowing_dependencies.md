@@ -2,27 +2,27 @@
 
 ## Background
 
-[npmjs search results][npmjs/node] has stats on download count
-and open issues and PRs.
+`npmjs` search results ([results][npmjs/node]) have stats on download
+count and open issues and PRs.
 
 <img alt="npmjs.com stats for module node" src="../images/npmjs-node.png" height="399" width="230">
 
 Each package page also links to the corresponding GitHub project
-which has links to the project's [pulse][github-pulse].
+which has links to the project's pulse ([blog][github-pulse]).
 
 Both of these give an idea of how popular the project is, and
 whether it's actively developed.
 
-On their Github pages, many project's proudly display
-[badges and shields][] indicating their continuous integration status,
-and other project vital statistics.
+On their Github pages, many projects proudly display badges and
+shields ([docs][badges and shields]) indicating their continuous
+integration status, and other vital statistics.
 
-The Linux Core Infrastructure project espouses a set of [best
-practices badge][]s that define tiers for mature infrastructure
-projects.  We get some of the basic items for free by distributing via
-`npm`, but other items bear on how responsive the project might be to
-vulnerability reports and how it might respond to attempts to inject
-malicious code:
+The Linux Core Infrastructure project espouses a set of best practices
+badges ([docs][best practices badge]) and define tiers for mature
+infrastructure projects.  We get some of the basic items for free by
+distributing via `npm`, but other items bear on how responsive the
+project might be to vulnerability reports and how it might respond to
+attempts to inject malicious code:
 
 *  Another will have the necessary access rights if someone dies
 *  Monitor external dependencies to detect/fix known vulnerabilities
@@ -41,7 +41,7 @@ and `npm profile`.
 Threats: [LQC][] [MTP][]
 
 The npm repository, like other open-source code repositories,
-contains mature & well-maintained modules, but also plenty of
+contains mature and well-maintained modules, but also plenty of
 bleeding-edge code that has not yet had bugs ironed out.
 
 A wise technical lead might decide that they can use third-party
@@ -85,12 +85,12 @@ it or another forum could aggregate more including
    dependencies and peer dependencies that have them.
 -  Support channels, e.g. slack & discord.
 -  Vulnerability reports and the version they affect whether
-   listing CVE-IDs, or summarizing sources like [snyk][]
-   or [GitHub graph][].
+   listing CVE-IDs, or summarizing sources like snyk ([results][snyk])
+   or GitHub graph ([blog][GitHub graph]).
 -  Weighted mean of age of production dependencies transitively.
 -  Results of linters (see [oversight][]) run without respecting
-   [inline ignore comments][eslint-ignore-line] and
-   [file ignore directives][eslint-ignore-file].
+   inline ignore comments ([docs][eslint-ignore-line]) and
+   file ignore directives ([docs][eslint-ignore-file]).
 
 Users deciding whether to buy something from an online store or
 download a cellphone app from an app store have reviews
@@ -107,10 +107,11 @@ that are debating whether to dip their toe in.
 
 ### Leadership & Developer outreach
 
-The node runtime already [passes][CI-node] the
-[Linux Foundation's best practices][best practices badge] criteria, but
-could lead the way by explaining how a project that pushes from GitHub
-to `registry.npmjs.org` can pass more of these criteria.
+The node runtime already passes ([results][CI-node]) the Linux
+Foundation's best practices ([project][best practices badge])
+criteria, but could lead the way by explaining how a project that
+pushes from GitHub to `registry.npmjs.org` can pass more of these
+criteria.
 
 
 [npmjs/node]: https://www.npmjs.com/package/node
