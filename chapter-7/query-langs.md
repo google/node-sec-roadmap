@@ -3,10 +3,10 @@
 Threats: [QUI][]
 
 One piece of simple advice to avoid [query injection attacks][QUI] is
-"just use [prepared statements][]."
+"just use prepared statements" ([definition][prepared statements]).
 
-This is good advice, and the [`mysql`][] library has a solid,
-well-documented API for producing secure prepared statements.
+This is good advice, and the `mysql` ([docs][`mysql`]) library has a
+solid, well-documented API for producing secure prepared statements.
 
 Developers could do
 
@@ -38,12 +38,12 @@ statements have other problems:
    and the '`?`'s placeholders that they fill.  When a prepared statement
    has more substitutions than fit in a reader's working memory, they
    have to look back and forth between the prepared statement, and the
-   substitution list.
-*  It is difficult or impossible to **compose a prepared statement**
-   from simpler parts in database libraries.
-   It's not possible to compute the `WHERE` clause of a query separately
-   from the result column set and then compose the two into a query
-   without resorting to string concatenation somewhere along the line.
+   parameter list.
+*  Prepared statements do not make it easy to **compose a query** from
+   simpler query fragments.  It's not easy to compute the `WHERE`
+   clause separately from the result column set and then combine the
+   two into a query without resorting to string concatenation
+   somewhere along the line.
 
 
 ## Template literals
@@ -56,7 +56,8 @@ both worlds.
 connection.query`SELECT * FROM T WHERE x = ${x}, y = ${y}, z = ${z}`(callback)
 ```
 
-uses a [tagged template literal][] to allow inline expressions in SQL syntax.
+uses a tagged template literal ([docs][tagged template literal]) to
+allow inline expressions in SQL syntax.
 
 > A more advanced form of template literals are tagged template
 > literals. Tags allow you to parse template literals with a
@@ -65,7 +66,7 @@ uses a [tagged template literal][] to allow inline expressions in SQL syntax.
 > expressions. In the end, your function can return your manipulated
 > string (or it can return something completely different ...).
 
-The code above is (almost) equivalent to
+The code above is almost equivalent to
 
 ```js
 connection.query(
@@ -82,30 +83,34 @@ We can tweak SQL APIs so that, when used as template literal tags,
 they escape the dynamic parts to preserve the intent of the author of
 the static parts, and then re-interleave them to produce the query.
 
-The [example code][sql-code] accompanying this chapter
-implements this idea by defining a `mysql.sql` function that
-parses the static part to choose appropriate escapers for the
-dynamic parts.
+The example ([code][sql-code]) accompanying this chapter implements
+this idea by defining a `mysql.sql` function that parses the static
+parts to choose appropriate escapers for the dynamic parts.
 
-It also provides string wrappers `Identifier` and `SqlFragment` to
+It also provides string wrappers, `Identifier` and `SqlFragment`, to
 make it easy to compose complex queries from simpler parts:
 
 ```js
-function computeRowFilter(x, y, z) {
+// Compose a query from two fragments.
+// When the value inside ${...} is a SqlFragment, no extra escaping happens.
+connection.query`
+    SELECT ${outputColumnsAndJoins(a, b, c)}
+    WHERE  ${rowFilter(x, y, z)}
+`(callback)
+
+// Returns a SqlFragment
+function rowFilter(x, y, z) {
   if (complexCondition) {
     // mysql.sql returns a SqlFragment
     return mysql.sql`X = ${x}`;
   } else {
-    return mysql.sql`Y = ${y}`;
+    return mysql.sql`Y = ${y} AND Z=${z}`;
   }
 }
 
-...
-
-// When the value inside ${...} is a SqlFragment, no extra escaping is done.
-connection.query(callback)`
-    SELECT ${computeOutputColumnsAndJoins(a, b, c)} WHERE ${computeRowFilter(x, y, z)}
-    `
+function outputColumnsAndJoins(a, b, c) {
+  return mysql.sql`...`;
+}
 ```
 
 ----
@@ -122,7 +127,7 @@ robust, more secure, and easy to compose will make it a good migration
 target for teams that realize they have a problem with SQL injection.
 We also hope these factors will cause developers who have been through
 such a migration to continue to use it in subsequent projects where it
-will spread to other developers.
+may spread to other developers.
 
 
 ```js

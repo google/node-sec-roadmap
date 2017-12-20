@@ -17,16 +17,17 @@ forgoing sanity checks and shipping code in a timely manner.
 
 ## Background
 
-[JSConformance][] allows a project team to specify a policy for Closure
-JavaScript.  This policy can encode lessons learned about
-APIs that are prone to misuse.  By taking into account type
-information about arguments and `this`-values it can distinguish
-problematic patterns like `setTimeout(aString, dt)`
-from unproblematic ones `setTimeout(aFunction, dt)`.
+JSConformance ([docs][JSConformance]) allows a project team to specify
+a policy for Closure JavaScript.  This policy can encode lessons
+learned about APIs that are prone to misuse.  By taking into account
+type information about arguments and `this`-values it can distinguish
+problematic patterns like `setTimeout(aString, dt)` from unproblematic
+ones `setTimeout(aFunction, dt)`.
 
-[tslint][] and [eslint][] both allow custom rules so can be extended
-as a project or developer community identifies Good and Bad parts of
-JavaScript for their particular context.
+TSLint ([project][tslint]) and ESLint ([project][eslint]) both allow
+custom rules so can be extended as a project or developer community
+identifies Good and Bad parts of JavaScript for their particular
+context.
 
 
 
@@ -44,11 +45,11 @@ could try to encode that knowledge in an automatable policy.
 
 Linters are not perfect.  There are no sound production-quality static
 type systems for JavaScript, so its linters are also necessarily
-heuristic.  Tslint typically has more fine-grained type information
-available than eslint, so there are probably more anti-patterns that
-can be identified with an acceptable false-positive rate in tslint
-than eslint, but feedback about what can and can't be expressed in
-eslint might give eslint maintainers useful feedback.
+heuristic.  TSLint typically has more fine-grained type information
+available than ESLint, so there are probably more anti-patterns that
+TSLint can identify with an acceptable false-positive rate than
+ESLint, but feedback about what can and can't be expressed in ESLint
+might give its maintainers useful feedback.
 
 Linters can reduce the burden on reviewers by enabling computer aided
 code review --- helping reviewers focus on areas that use powerful
@@ -58,7 +59,14 @@ They can also give developers a sense of how controversial a review
 might be, and guide them in asking the right kinds of questions.
 
 Custom policies can also help educate developers about alternatives.
-For example, for client-side JavaScript:
+
+The rule below specifies an anti-pattern for client-side JavaScript
+in machine-checkable form, assigns it a name, has a short summary that
+can appear in an error message, and a longer description or
+documentation URL that explains the reasoning behind the rule.
+
+It also documents a number of known exceptions to the rule, for
+example, APIs that wrap `document.write` to do additional checks.
 
 ```pb
 requirement: {
@@ -90,20 +98,12 @@ requirement: {
   value: 'Document.prototype.write'
   value: 'Document.prototype.writeln'
 
-  # These use have been determined to be safe by manual review.
+  # These uses have been determined to be safe by manual review.
   whitelist: 'javascript/closure/async/nexttick.js'
   whitelist: 'javascript/closure/base.js'
   whitelist: 'javascript/closure/dom/safe.js'
 }
 ```
-
-This rule specifies the anti-pattern in machine-checkable form,
-assigns it a name, has a short summary that can appear in an error
-message, and a longer description or documentation URL that explains
-the reasoning behind the rule.
-
-It also incorporates a number of known exceptions to the rule, for
-example, APIs that wrap `document.write` to do additional checks.
 
 ----
 
@@ -130,7 +130,7 @@ concurrent:
    from others.
 -  Code reviewers critique pull requests for correctness, maintainability,
    testability.
--  Release candidate reviewers where professional testers examine a
+-  Release candidate reviews where professional testers examine a
    partial system and try to break it.
 -  Pre-launch reviews where legal, security & privacy, and other
    concerned parties come to understand the state of the system and
@@ -141,16 +141,16 @@ Reviews should happen early and late.  When designing a system or a
 new feature, technical leads should engage specialists.  Before
 shipping, they should circle back to double check the implementation.
 During rapid development though, developers should drive development
---- they may ask questions, and may receive feedback (solicited & not),
-but ought not have to halt work while they wait for reviews from
+--- they may ask questions, and may receive feedback (solicited and
+not), but ought not have to halt work while they wait for reviews from
 specialists.
 
-Some code reviews have a higher security impact than other, so
+Some changes have a higher security impact than other, so
 some will require review by security specialists, but not most.
 
 During an ongoing security review, security specialists can contribute
-use cases & test cases; file issues; help to integrate tools like
-linters, fuzzers, and vulnerability scanners.
+use cases and test cases; file issues; and help to integrate tools
+like linters, fuzzers, and vulnerability scanners.
 
 As described in "[Keeping your dependencies close][]", new third-party
 modules are of particular interest to security specialists, but

