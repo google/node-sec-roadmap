@@ -8,7 +8,8 @@ weaponize the disclosure before the product team
 *  finds a patch to the vulnerable dependency, or rolls their own, and
 *  tests the patched release and pushes it into production.
 
-["The Best Defenses Against Zero-day Exploits for Various-sized Organizations"][sans] notes
+["The Best Defenses Against Zero-day Exploits for Various-sized
+Organizations"][sans] notes
 
 > Zero-day exploits are vulnerabilities that have yet to be publicly
 > disclosed. These exploits are usually the most difficult to defend
@@ -33,7 +34,7 @@ compromise a system without explicit direction by a human attacker,
 and use the compromise of one system to find other systems to
 automatically compromise.
 
-Researchers have found [vectors][saccone] by which worms
+Researchers have found ways ([details][saccone]) that worms
 might propagate throughout `registry.npmjs.org` and common practices
 that might allow a compromise to jump from the module repository to
 large numbers of production servers.

@@ -14,16 +14,17 @@ Before we discuss the threat environment, it's worth noting that the threat
 environment for server-side JavaScript is quite different from that for
 client-side JavaScript.  For example,
 
-* Client-side JavaScript runs in the context of the [same-origin policy][]
-  possibly with a [Content-Security-Policy][] which governs which code can load.
-  Server-side JavaScript **code loading** is typically only constrained by the
-  files on the server, and the values that can reach `require(...)`, `eval(...)`
-  and similar operators.
-* Client-side JavaScript typically only has access to data that the human
-  using the browser should have access to.
-  On the server, applications are responsible for
-  **data [compartmentalization][]**, and server-side JavaScript also has
-  direct access to storage systems and other backends.
+* Client-side JavaScript runs in the context of the
+  [same-origin policy][] possibly with a
+  [Content-Security-Policy][CSP] which governs which code can load.
+  Server-side JavaScript **code loading** is typically only
+  constrained by the files on the server, and the values that can
+  reach `require(...)`, `eval(...)` and similar operators.
+* Client-side JavaScript typically only has access to data that the
+  human using the browser should have access to.  On the server,
+  applications are responsible for **data [compartmentalization][]**,
+  and server-side JavaScript also has direct access to storage
+  systems and other backends.
 * **File-system access** by the client typically either requires human
   interaction
   (`<input type=file>`, `Content-disposition:attachment`), or can only access
@@ -40,10 +41,10 @@ client-side JavaScript.  For example,
 * **Network messages** sent by server-side JavaScript originate inside
   the server's LAN, but those sent by client-side JavaScript typically do not.
 * **Shared memory concurrency** in client-side JavaScript happens via
-  well-understood APIs like `SharedArrayBuffer`.
-  [Experimental modules][threads-a-gogo] and a [workers proposal][]
-  allow server-side JavaScript to fork threads; it is unclear how
-  widespread these are in production or how
+  well-understood APIs like `SharedArrayBuffer`.  Experimental modules
+  ([code][threads-a-gogo]) and a [workers proposal][]
+  allow server-side JavaScript to fork threads; it is
+  unclear how widespread these are in production or how
   [susceptible][thread corner cases] these are to memory corruption.
 
 The threat environment for server-side JavaScript is much closer to
@@ -73,23 +74,21 @@ columns, and link to the discussion.
 | [CRY][]   | Misuse of crypto leads to poor access-control decisions or data leaks.                | Medium    | Medium   | [ovrsi][m-os]               |
 | [DEX][]   | Poor developer experience slows or prevents release of features.                      | ?         | ?        | [dynam][m-dy] [ovrsi][m-os] |
 | [EXF][]   | Exfiltration of data, e.g. by exploiting reflection to serialize more than intended.  | Med-High  | Low-Med  | [ovrsi][m-os]               |
-| [LQC][]   | Using low quality dependencies makes application a [confusable deputy][]              | Medium    | Low-Med  | [kdeps][m-kd] [ovrsi][m-os] |
-| [MTP][]   | Theft of commit rights or [mitm][] causes `npm install` to fetch malicious code.      | Low       | Med-High | [kdeps][m-kd] [cdeps][m-cd] |
-| [QUI][]   | [Query injection][] on a production machine.                                          | Medium    | Med-High | [ovrsi][m-os] [qlang][m-ql] |
+| [LQC][]   | Using low quality dependencies leads to exploit                                       | Medium    | Low-Med  | [kdeps][m-kd] [ovrsi][m-os] |
+| [MTP][]   | Theft of commit rights or MITM causes `npm install` to fetch malicious code.          | Low       | Med-High | [kdeps][m-kd] [cdeps][m-cd] |
+| [QUI][]   | Query injection on a production machine.                                              | Medium    | Med-High | [ovrsi][m-os] [qlang][m-ql] |
 | [RCE][]   | Remote code execution, e.g. via `eval`                                                | Med-High  | High     | [dynam][m-dy] [ovrsi][m-os] |
 | [SHP][]   | Shell injection on a production machine.                                              | Low       | High     | [ovrsi][m-os] [cproc][m-cp] |
 | [UIR][]   | `require(untrustworthyInput)` loads code not intended for production.                 | Low       | Low-High | [dynam][m-dy]               |
 
 [same-origin policy]: https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy
-[Content-Security-Policy]: https://developers.google.com/web/fundamentals/security/csp/
+[CSP]: https://developers.google.com/web/fundamentals/security/csp/
 [compartmentalization]: https://cwe.mitre.org/data/definitions/653.html
 [nodejs/fs]: https://nodejs.org/api/fs.html
 [nodejs/child_process]: https://nodejs.org/api/child_process.html
 [threads-a-gogo]: https://github.com/xk/node-threads-a-gogo/blob/74005641d53b0d85e8d75e2506eddbded15f5112/src/threads_a_gogo.cc#L1387
 [workers proposal]: https://github.com/nodejs/worker/issues/2
 [thread corner cases]: https://github.com/nodejs/worker/issues/4#issuecomment-306090967
-[confusable deputy]: https://cwe.mitre.org/data/definitions/441.html
-[mitm]: https://cwe.mitre.org/data/definitions/300.html
 [Query Injection]: https://cwe.mitre.org/data/definitions/89.html
 [0DY]: threat-0DY.md
 [BOF]: threat-BOF.md

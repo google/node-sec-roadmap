@@ -3,9 +3,9 @@
 Threats: [QUI][]
 
 One piece of simple advice to avoid [query injection attacks][QUI] is
-"just use prepared statements" ([definition][prepared statements]).
+"just use [prepared statements][]."
 
-This is good advice, and the `mysql` ([docs][`mysql`]) library has a
+This is good advice, and the [`mysql`][] library has a
 solid, well-documented API for producing secure prepared statements.
 
 Developers could do
@@ -56,8 +56,8 @@ both worlds.
 connection.query`SELECT * FROM T WHERE x = ${x}, y = ${y}, z = ${z}`(callback)
 ```
 
-uses a tagged template literal ([docs][tagged template literal]) to
-allow inline expressions in SQL syntax.
+uses a [tagged template literal][] to allow inline expressions in SQL
+syntax.
 
 > A more advanced form of template literals are tagged template
 > literals. Tags allow you to parse template literals with a

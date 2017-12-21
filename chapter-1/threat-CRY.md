@@ -7,7 +7,8 @@ Failing to identify third-party modules that use crypto (or should be
 using crypto) and determining whether they are using it properly can lead
 to a false sense of security.
 
-["Developer-Resistant Cryptography"][Cairns & Steel] by Cairns & Steel notes:
+["Developer-Resistant Cryptography"][Cairns & Steel] by Cairns & Steel
+notes:
 
 > The field of cryptography is inherently difficult. Cryptographic API
 > development involves narrowing a large, complex field into a small set

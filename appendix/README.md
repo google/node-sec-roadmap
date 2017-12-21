@@ -94,7 +94,7 @@ be feasible.
 
 ## Methodology
 
-The code is available on [Github](https://github.com/google/node-sec-roadmap/tree/master/appendix).
+The code is [available on Github][code].
 
 ```bash
 $ npm --version
@@ -103,9 +103,9 @@ $ npm --version
 
 ### Top 100 Module list
 
-I extracted `top100.txt` by browsing to
-[the most depended-upon package list](https://www.npmjs.com/browse/depended)
-and running the below in the dev console until I had >= 100 entries.
+I extracted `top100.txt` by browsing to the most depended-upon
+[package list][top100] and running the below in the dev console until
+I had >= 100 entries.
 
 ```js
 var links = document.querySelectorAll('a.name')
@@ -186,3 +186,6 @@ Concatenating those markdown snippets produces the summary above.
  done) \
 > /tmp/mds/summary
 ```
+
+[code]: https://github.com/google/node-sec-roadmap/tree/master/appendix
+[top100]: https://www.npmjs.com/browse/depended

@@ -129,7 +129,7 @@ aliases it, so functions that do not mention the special name
 to check for any use of `arguments`, and for any escape of permissions
 or `module`.
 
-`evalPermission` is an opaque token --- only its reference identity
+`evalPermission` is an opaque token &mdash; only its reference identity
 is significant, so we can check membership in a `WeakSet` without
 risk of forgery.
 

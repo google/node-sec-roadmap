@@ -20,6 +20,17 @@
     width: 30px;
     font-size: 0;
     background-image: url("/images/ic_print_24dp.svg");
-    background-repeat:no-repeat;
+    background-repeat: no-repeat;
     background-position: center center;
+}
+
+/* Style external links */
+a[href^="http://"]:not([href^="http://www.gitbook.com"]),
+a[href^="https://"]:not([href^="https://www.gitbook.com"]),
+a[href^="//"]:not([href^="//www.gitbook.com"]) {
+    background-image: url("/images/FileExternal.svg");
+    background-position: center right;
+    background-repeat: no-repeat;
+    background-size: 12px 12px;
+    padding-right: 14px;
 }

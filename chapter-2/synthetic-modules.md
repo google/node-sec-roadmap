@@ -19,9 +19,8 @@ html
     ...`;
 ```
 
-This code snippet uses a tagged template literal
-([docs][tagged template literal]) to allow Pug template code to appear
-inline in a JavaScript file.
+This code snippet uses a [tagged template literal][] to allow Pug
+template code to appear inline in a JavaScript file.
 
 Rather than loading a `.pug` file, we have declared it in JavaScript.
 
@@ -101,8 +100,7 @@ adopted some conventions:
    ```js
    pug.lang(myPugOptionMap)`
      doctype html
-     ...
-   `
+     ...`
    ```
 *  If the first line starts with some whitespace, all subsequent
    lines have that same whitespace as a prefix, and the language
@@ -116,13 +114,13 @@ discussing [library tweaks][library].
 This proposal has one major drawback: we still have to trust the code
 generator.  Pug's code generator looks well structured, but reasoning
 about all the code produced by a code generator is harder than
-reasoning about one hand-written module.  The frozen realms proposal
-([spec][frozen realms]) restricts code to a provided API like
+reasoning about one hand-written module.  The [frozen realms][] proposal
+restricts code to a provided API like
 `vm.runInNewContext` aimed to.  If Pug, for example, chose to load its
 code in a sandbox, then checking just the provided context would give
 us confidence about what generated code could do.  In some cases, we
-might be able to move code generator entirely outside the "trusted
-computing base" ([definition][TCB]).
+might be able to move code generator outside the
+[*trusted computing base*][TCB].
 
 [tagged template literal]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals
 [pug-eval]: https://github.com/pugjs/pug/blob/926f7c720112cac76cfedb003e25e9f43d3a1767/packages/pug/lib/index.js#L261-L263

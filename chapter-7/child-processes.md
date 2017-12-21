@@ -2,7 +2,7 @@
 
 Threats: [SHP][]
 
-The `shelljs` module ([npm][shelljs]) allows access to the system
+The [`shelljs` module][shelljs] allows access to the system
 shell.  We focus on `shelljs`, but similar arguments apply to builtins
 like `child_process.spawn(cmd, { shell: ... })` ([docs][cp.spawn]) and
 similar modules.
@@ -20,8 +20,8 @@ sloppily composes a sub-shell.  The problem of tools that trust their
 inputs is not limited to shell scripts: see discussion of image decoders
 in [BOF][].
 
-The shell grammar ([docs][shell grammar]) has more layers of
-interpretation so is arguably more complex than any one SQL grammar.
+The [shell grammar][] has more layers of interpretation so is arguably
+more complex than any one SQL grammar.
 
 We can do much better than string concatenation though.  The code
 below is vulnerable.

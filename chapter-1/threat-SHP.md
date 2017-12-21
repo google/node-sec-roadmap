@@ -4,15 +4,14 @@
 the structure of a command passed to a shell or causes a child process
 to execute an unintended command or with unintended arguments.
 Typically, this is because code or a dependency invokes
-[child_process][api/child_process] with an argument partially composed
-from untrusted inputs.
+[child\_process][api/child_process] with an argument partially
+composed from untrusted inputs.
 
-Shell injection may also occur during development and deployment.
-For example, [`npm`][npm hooks] and [`bower`][bower hooks]
-`{pre-,post-,}install` hooks may be subject to shell injection
-via filenames that contain shell meta-characters in malicious
-transitive dependencies but we classify this as an [MTP][]
-vulnerability.
+Shell injection may also occur during development and deployment.  For
+example, [npm][npm hooks] and [Bower][bower hooks]
+`{pre-,,post-}install` hooks may be subject to shell injection via
+filenames that contain shell meta-characters in malicious transitive
+dependencies but we classify this as an [MTP][] vulnerability.
 
 [MTP]: threat-MTP.md
 [npm hooks]: https://docs.npmjs.com/misc/scripts

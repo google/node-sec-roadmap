@@ -43,9 +43,10 @@ The entire process looks like:
 8.  Normal log collecting and monitoring communicates failures
     to the development team.
 
-This is similar to [Content-Security-Policy][] (CSP) but for server-side
-code.  Like CSP, there is an intermediate step that might be useful
-between no enforcement and full enforcement: [report only mode][].
+This is similar to [Content-Security-Policy (CSP)][csp] but for
+server-side code.  Like CSP, there is an intermediate step that might
+be useful between no enforcement and full enforcement:
+[report only mode][].
 
-[Content-Security-Policy]: https://developers.google.com/web/fundamentals/security/csp/
+[CSP]: https://developers.google.com/web/fundamentals/security/csp/
 [report only mode]: https://developers.google.com/web/fundamentals/security/csp/#report-only

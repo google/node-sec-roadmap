@@ -12,8 +12,8 @@ Buffer overflow vectors in Node.js are:
 *  The Node.js runtime and dependencies like the JS runtime and OpenSSL
 *  [C++ addons][] third-party modules that use N-API (the native API).
 *  Child processes.  For example, code may route a request body to an
-   [image processing library][imagetragick] that was not written with
-   untrusted inputs in mind.
+   [image processing library][imagetragick] that was not
+   written with untrusted inputs in mind.
 
 Buffer overflows are common, but we class them as low frequency for
 Node.js in particular.  The runtime is highly reviewed compared to the

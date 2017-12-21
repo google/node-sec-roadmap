@@ -1,8 +1,8 @@
 # Query Injection
 
-[Query injection][] occurs when an attacker causes a query sent
-to a database or other backend to have a [structure][spp] that differs
-from that the developer intended.
+[Query injection][] occurs when an attacker causes a query sent to a
+database or other backend to have a [structure][spp] that differs from
+that the developer intended.
 
 ```js
 connection.query(

@@ -21,7 +21,7 @@ book : gitbook_out/.tstamp check
 pdf : node_modules
 	PATH="${PATH}:./node_modules/.bin/:${CALIBRE_HOME}" ./node_modules/.bin/gitbook pdf
 
-gitbook_out/.tstamp : node_modules book.json README.md SUMMARY.md $(wildcard chapter-*/*.md) appendix/README.md CONTRIBUTORS.md styles/website.css
+gitbook_out/.tstamp : node_modules book.json README.md SUMMARY.md $(wildcard chapter-*/*.md) appendix/README.md CONTRIBUTORS.md styles/website.css images/*
 	"${ROOT_DIR}"/node_modules/.bin/gitbook build . gitbook_out
 	touch gitbook_out/.tstamp
 
@@ -35,7 +35,7 @@ check :
 		echo Running htmlproofer; \
 		"${HTML_PROOFER}" \
 		  --alt-ignore=example/graphs/full.svg \
-		  --url-ignore="https://github.com/google/node-sec-roadmap/,https://github.com/google/node-sec-roadmap/issues,../book.pdf,book.pdf,https://github.com/google/node-sec-roadmap/tree/master/appendix,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sh,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sql,https://github.com/google/node-sec-roadmap/tree/master/chapter-2/experiments/webpack-compat" \
+		  --url-ignore="https://github.com/google/node-sec-roadmap/,https://github.com/google/node-sec-roadmap/issues,../book.pdf,book.pdf,https://github.com/google/node-sec-roadmap/tree/master/appendix,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sh,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sql,https://github.com/google/node-sec-roadmap/tree/master/chapter-2/experiments/webpack-compat,https://github.com/google/node-sec-roadmap/blob/6130b76446ff4efbb276d8128c12e41ea2fffbc9/chapter-2/example/make_dep_graph.sh#L39-L73,https://github.com/google/node-sec-roadmap/blob/master/chapter-2/example/make_dep_graph.sh" \
 		  "${ROOT_DIR}"/gitbook_out/; \
 	fi
 

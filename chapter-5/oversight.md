@@ -17,17 +17,16 @@ forgoing sanity checks and shipping code in a timely manner.
 
 ## Background
 
-JSConformance ([docs][JSConformance]) allows a project team to specify
-a policy for Closure JavaScript.  This policy can encode lessons
-learned about APIs that are prone to misuse.  By taking into account
-type information about arguments and `this`-values it can distinguish
-problematic patterns like `setTimeout(aString, dt)` from unproblematic
-ones `setTimeout(aFunction, dt)`.
+[JSConformance][] allows a project team to specify a policy for
+Closure JavaScript.  This policy can encode lessons learned about APIs
+that are prone to misuse.  By taking into account type information
+about arguments and `this`-values it can distinguish problematic
+patterns like `setTimeout(aString, dt)` from unproblematic ones
+`setTimeout(aFunction, dt)`.
 
-TSLint ([project][tslint]) and ESLint ([project][eslint]) both allow
-custom rules so can be extended as a project or developer community
-identifies Good and Bad parts of JavaScript for their particular
-context.
+[TSLint][tslint] and [ESLint][eslint] both allow custom rules so can
+be extended as a project or developer community identifies Good and
+Bad parts of JavaScript for their particular context.
 
 
 

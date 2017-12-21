@@ -4,16 +4,17 @@
 
 Node.js code is composed of CommonJS modules that are linked together
 by the builtin `require` function, or [`import`][import-js] statements
-(used by [typescript][import-ts]) that typically transpile to `require`
-(modulo [experimental features][esm]).
+(used by [TypeScript][import-ts]) that typically transpile to
+`require` (modulo [experimental features][esm]).
 
-`require` itself calls [`Module._load`][] to resolve and load code.
-["The Node.js Way"][FKS] explains this flow well.
+`require` itself calls `Module._load` ([code][Module._load]) to
+resolve and load code.  ["The Node.js Way"][FKS] explains this flow
+well.
 
-Unlike `import`, `require` is dynamic: a runtime value can specify
-the name of a module to load.  (The EcmaScript committee is
-considering a [dynamic `import` operator][import-op-strawman], but we
-have not included that in this analysis.)
+Unlike `import`, `require` is dynamic: a runtime value can specify the
+name of a module to load.  (The EcmaScript committee is considering a
+[dynamic `import` operator][import-op-strawman], but we have
+not included that in this analysis.)
 
 
 This dynamism is powerful and flexible and enables varied use cases
@@ -150,15 +151,14 @@ rewrites of code that uses using them constitutes compromises [DEX][].
 
 ## Current practices
 
-Some development teams use [webpack][] or similar tools originally
-developed for client-side code to statically bundle server-side
-modules, and provide flexible transpilation pipelines.  That's a
-great way to do things, but solving security problems only for teams
-with development practices mature enough to deploy via webpack risks
-preaching to the choir.
+Some development teams use [webpack][] or similar tools to statically
+bundle server-side modules, and provide flexible transpilation
+pipelines.  That's a great way to do things, but solving security
+problems only for teams with development practices mature enough to
+deploy via webpack risks preaching to the choir.
 
 Webpack, in its minimal configuration, does not attempt to skip
-test files ([experiment code][webpack-experiment]).
+test files ([code][webpack-experiment]).
 Teams with an experienced webpack user can use it to great effect, but
 it is not an out-of-the-box solution.
 
@@ -204,10 +204,9 @@ We propose these changes:
 [Symbol]: (https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol)
 [import-js]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import
 [import-ts]: https://www.typescriptlang.org/docs/handbook/modules.html#import
-[`Module._load`]: https://github.com/nodejs/node/blob/0fdd88a374e23e1dd4a05d93afd5eb0c3b080fd5/lib/module.js#L449
+[Module._load]: https://github.com/nodejs/node/blob/0fdd88a374e23e1dd4a05d93afd5eb0c3b080fd5/lib/module.js#L449
 [FKS]: http://fredkschott.com/post/2014/06/require-and-the-module-system/
 [esm]: https://nodejs.org/api/esm.html#esm_ecmascript_modules
-[Content-Security-Policy]: https://developers.google.com/web/fundamentals/security/csp/
 [nodemon]: https://nodemon.io/
 [import-op-strawman]: https://github.com/tc39/proposal-dynamic-import
 [chroot jail]: https://help.ubuntu.com/community/BasicChroot

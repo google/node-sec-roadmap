@@ -2,42 +2,39 @@
 
 ## Background
 
-When deploying an application or service, many projects run
-`npm install` which can cause problems.  James Shore
-([blog][James Shore]) discusses the problem and several solutions,
-none of which are ideal.
+When deploying an application or service, many projects run `npm
+install` which can cause problems.  [James Shore][] discusses the
+problem and several solutions, none of which are ideal.
 
 *  Network trouble reaching `registry.npmjs.org` becomes a single
    point of failure.
 *  An extra `npm shrinkwrap` step is necessary to ensure that
    the versions used during testing are the same as the versions
-   deployed (Shore's analysis predates package locks
-   ([docs][package locks])), or
+   deployed (Shore's analysis predates [package locks][], or
 *  Developers check `node_modules` into revision control which
    may include architecture-specific binaries.
 *  Local changes may be silently lost when re-installed on a dev
    machine or on upgrade.
 
 Other module systems allow working from a local replica,
-e.g. maven ([docs][maven-replica]).
+e.g. [maven][maven-replica].
 
-Yarn ([project][yarn]) downloads from the same central repository
-as `npm` but can instead fetch from an offline mirror
-([blog][offline mirror]).  The offline mirror can have multiple
-tarballs per module to deal with architecture specific builds.  The
-`yarn` tool has an `--offline` mode that prevents falling back to
-central, though does not prevent network fetches by module scripts.
+[Yarn][yarn] downloads from the same central repository as `npm` but
+can instead fetch from an [offline mirror][].  The offline mirror can
+have multiple tarballs per module to deal with architecture specific
+builds.  The `yarn` tool has an `--offline` mode that prevents falling
+back to central, though does not prevent network fetches by module
+scripts.
 
 
 ## Problem
 
 Threats: [0DY][] [MTP][]
 
-Security teams needs to match vulnerability reports
-([wikipedia][CVE-IDs]) with projects that use affected modules so that
-they can respond to [zero days][0DY].  Centralizing module
-installation allows them to figure out whether a report affects a
-module.
+Security teams needs to match vulnerability reports with projects that
+use affected modules so that they can respond to [zero days][0DY].
+Centralizing module installation allows them to figure out whether a
+report affects a module.
 
 Large organizations with dedicated security specialists need to be
 able to locally patch security issues or critical bugs and push to
@@ -72,7 +69,7 @@ and
 and
 
 *  installation scripts only affect `node_modules` so cannot
-   compromise local repositories or plant trojans ([wikipedia][trojan]).
+   compromise local repositories or plant [trojans][trojan].
 
 
 ## Existing solutions
@@ -129,13 +126,12 @@ replica.
 
 *  Developers' muscle memory may cause them to invoke `npm` instead of
    `yarn` so on a developer machine `$(which npm)` run in an
-   interactive shell ([docs][interactive shell]) should halt and
-   remind the developer to use `yarn` instead.  Presubmit checks
-   should scan scripts for invocations of `npm` to remind developers
-   to use `yarn`.  It may be possible to use a project specific
-   `.npmrc` with flags that cause it to dry-run or dump usage and
-   exit, but this would affect non-interactive scripts so tread
-   carefully.
+   [interactive shell][] should halt and remind the developer to use
+   `yarn` instead.  Presubmit checks should scan scripts for
+   invocations of `npm` to remind developers to use `yarn`.  It may be
+   possible to use a project specific `.npmrc` with flags that cause
+   it to dry-run or dump usage and exit, but this would affect
+   non-interactive scripts so tread carefully.
 *  A script can aid installing new modules into the local replica.
    It should:
 
@@ -146,9 +142,7 @@ replica.
       not run with access to:
       *  Any local repository
       *  Directories on a developer's `$PATH`
-      *  Any `npm login` or `yarn login` ([docs][`yarn login`]
-         credentials.  See [MTP][] which mentions Saccone's POC
-         ([disclosure][saccone]).
+      *  Any `npm login` or [`yarn login`][] credentials. See [MTP][].
    3. Check the revision controlled portion and any organization-specific
       metadata into revision control
    4. File a tracking issue for review of the new module, so that

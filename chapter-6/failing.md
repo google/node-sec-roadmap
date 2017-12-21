@@ -2,9 +2,8 @@
 
 ## Background
 
-The "Incident Handlers Handbook" ([publication][SANS]) discusses at
-length how to respond to security breaches, but the main takeaways
-are:
+The ["Incident Handlers Handbook"][SANS] discusses at length how to
+respond to security breaches, but the main takeaways are:
 
 *  You need to do work before incidents happen to be able to
    respond effectively.
@@ -13,15 +12,14 @@ are:
 *  Being in a position to respond effectively can limit damage when
    incidents occur.
 
-Node's proposed security working group ([project][security-wg])
+Node's proposed [security working group][security-wg]
 includes in its charter measures to route information about
 vulnerabilities and fixes to the right places, and coordinate response
 and disclosure.
 
-Package monitoring services like snyk ([results][snyk]), GitHub's
-package graph ([blog][github graph]), and the nodejs-sec list
-([group][nodejs-sec]) aim to help vulnerability reports get to those
-who need them.
+Package monitoring services like [snyk][], GitHub's
+[package graph][github graph], and the [nodejs-sec list][nodejs-sec]
+aim to help vulnerability reports get to those who need them.
 
 
 ## Problem
@@ -37,19 +35,19 @@ Each of the groups mentioned above is doing great work trying to help
 patches get to those who need them.  Each seems to be rolling their own
 naming scheme for vulnerabilities.
 
-The computer security community has a centralized naming scheme
-([wikipedia][CVE-IDs]) for vulnerability reports so that reports don't
-fall through the cracks.  Security responders rarely have the luxury
-of dealing with a single stack much less a single layer of that stack
-so mailing lists are not sufficient --- if reporters roll their own
-naming scheme or only disclose via unstructured text, reports will
-fall through the cracks.
+The computer security community has a
+[centralized naming scheme][CVE-IDs] for vulnerability reports so that
+reports don't fall through the cracks.  Security responders rarely
+have the luxury of dealing with a single stack much less a single
+layer of that stack so mailing lists are not sufficient --- if
+reporters roll their own naming scheme or only disclose via
+unstructured text, reports will fall through the cracks.
 
 ### Logging
 
 When trying to diagnose a problem, responders often look to log files.
-There has been much written on how to protect logs from forgery
-([definition][log injection]).
+There has been much written on how to protect logs from
+[forgery][log injection].
 
 ```js
 console.log(s);

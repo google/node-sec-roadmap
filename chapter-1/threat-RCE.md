@@ -8,8 +8,8 @@ invoke the JavaScript engine's parser on `x`.  If an attacker controls
 module or `vm` context that invoked the parser.
 
 Sandboxing can help but widely available sandboxes have
-[known workarounds][denicola-vm-run] though there is
-[hope][frozen realms].
+[known workarounds][denicola-vm-run] though the [frozen realms][]
+proposal aims to change that.
 
 It is harder to execute remote code in server-side JavaScript.
 `this[x][y] = "javascript:console.log(1)"` does not cause code to
@@ -55,12 +55,11 @@ x[a][b](s)();
 ```
 
 Filtering out values of `s` that "look like JavaScript" as they reach
-server-side code will probably not prevent code execution.  Yosuke
-Hasegawa [showed][Yosuke] how to reencode arbitrary JavaScript using
-only 6 punctuation characters, and that number will [fall to 5][Masato]
-if the `|>` operator proposal succeeds.
-["Web Application Obfuscation"][] by Heiderich et al. catalogues ways
-to bypass filtering.
+server-side code will probably not prevent code execution.
+[Yosuke Hasegawa][Yosuke] how to reencode arbitrary JavaScript using
+only 6 punctuation characters, and that number may
+[fall to 5][Masato].  ["Web Application Obfuscation"][obfusc] by
+Heiderich et al. catalogues ways to bypass filtering.
 
 `eval` also allows remote-code execution in Python, PHP, and
 Ruby code, but in those languages `eval` operators are harder to
@@ -84,6 +83,6 @@ than one user's data and privileged access to other backends.
 [frozen realms]: https://github.com/tc39/proposal-frozen-realms
 [Yosuke]: https://news.ycombinator.com/item?id=4370098
 [Masato]: https://syllab.fr/projets/experiments/xcharsjs/5chars.pipeline.html
-["Web Application Obfuscation"]: https://www.amazon.com/Web-Application-Obfuscation-Evasion-Filters/dp/1597496049
+[obfusc]: https://www.amazon.com/Web-Application-Obfuscation-Evasion-Filters/dp/1597496049
 [JSR 223]: https://docs.oracle.com/javase/8/docs/technotes/guides/scripting/prog_guide/api.html
 [dynjava]: https://www.ibm.com/developerworks/library/j-jcomp/index.html

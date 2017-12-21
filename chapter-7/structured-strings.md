@@ -86,9 +86,8 @@ to get a discussion started:
    your own to encourage interoperability.
    If a library defines a type representing a fragment of HTML, use that
    as long as your operator can uphold the type's contract.
-   For example if the type has a particular security contract
-   ([docs][security contract]), make sure that you preserve that
-   security contract.
+   For example if the type has a particular [security contract][],
+   make sure that you preserve that security contract.
    You may assume that wrapped strings come from a source that upheld
    the contract.
    Producing a value that doesn't uphold its contract when your inputs do

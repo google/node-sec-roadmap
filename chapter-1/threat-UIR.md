@@ -24,17 +24,17 @@ does not follow.  Developers do not vet test code the same way they
 do production code and ought not have to.
 
 This vulnerability may be novel to CommonJS-based module linking
-(though [we are not the first to report it][prior art]) so we discuss it in
-more depth than other classes of vulnerability.  Our frequency and
-severity guesstimates have a high level of uncertainty.
+(though we are not the first to report it ([details][prior art])) so we
+discuss it in more depth than other classes of vulnerability.  Our
+frequency and severity guesstimates have a high level of uncertainty.
 
 
 ## Dynamic `require()` can load non-production code
 
 `require` only loads from the file-system under normal configurations
-even though the [CommonJS spec](http://wiki.commonjs.org/wiki/Modules/1.1)
-leaves "unspecified whether modules are stored with a database, file system,
-or factory functions, or are interchangeable with link libraries."
+even though [CommonJS][modules spec] leaves "unspecified
+whether modules are stored with a database, file system, or factory
+functions, or are interchangeable with link libraries."
 
 Even though, as-shipped, `require` only loads from the file-system, a
 common practice of copying `node_modules` to the server makes
@@ -133,8 +133,8 @@ function getMarkdownImplementation() {
 This is not vulnerable.  It tries to satisfy a dependency by
 iteratively loading alternatives until it finds one that is available.
 
-[Babel-core v6's][babel-core dyn load] file transformation module loads
-plugins thus:
+Babel-core v6's file transformation module ([code][babel-core dyn load])
+loads plugins thus:
 
 ```js
 var parser = (0, _resolve2.default)(parserOpts.parser, dirname);
@@ -146,7 +146,7 @@ This looks in an options object for a module identifier.  It's
 unlikely that this particular code in babel is exploitable since
 developers probably won't let untrusted inputs specify parser options.
 
-The popular [colors:1.1.2][colors dyn load] module treats the argument
+The popular colors module ([code][colors dyn load]) treats the argument
 to `setTheme` as a module identifier.
 
 ```js
@@ -163,8 +163,8 @@ not load `colors` so an untrusted input will probably not reach
 If an attacker can control the argument to `setTheme` then they can
 load an arbitrary JavaScript source file or C++ addon.
 
-The popular [browserlist][browserlist dyn load] module takes part
-of a query string and treats it as a module name:
+The popular browserlist module ([code][browserlist dyn load]) takes
+part of a query string and treats it as a module name:
 
 ```js
   {
@@ -182,7 +182,7 @@ if they are, an attacker can load arbitrary available source files since
 The popular express framework loads file-extension-specific code
 as needed.  If express views are lazily initialized based on a portion
 of the request path without first checking that the path should have a
-view associated, then the [following code][express dyn load] runs:
+view associated, then the following runs ([code][express dyn load]):
 
 ```js
 if (!opts.engines[this.ext]) {
@@ -239,3 +239,4 @@ See also [exfiltration][EXF].
 [prior art]: https://github.com/nodesecurity/eslint-plugin-security/blob/master/README.md#detect-non-literal-require
 [diff fuzz]: https://www.blackhat.com/docs/eu-17/materials/eu-17-Arnaboldi-Exposing-Hidden-Exploitable-Behaviors-In-Programming-Languages-Using-Differential-Fuzzing-wp.pdf
 [EXF]: threat-EXF.md
+[modules spec]: http://wiki.commonjs.org/wiki/Modules/1.1
