@@ -83,9 +83,8 @@ it or another forum could aggregate more including
 -  Relevant badges & shields by percentage of transitive
    dependencies and peer dependencies that have them.
 -  Support channels, e.g. slack & discord.
--  Vulnerability reports and the version they affect whether
-   listing CVE-IDs, or summarizing sources like [snyk][]
-   or [GitHub graph][].
+-  Vulnerability reports and the version they affect.
+   See sources in ["When all else fails"][failing]
 -  Weighted mean of age of production dependencies transitively.
 -  Results of linters (see [oversight][]) run without respecting
    [inline ignore comments][eslint-ignore-line] and
@@ -117,8 +116,7 @@ criteria.
 [badges and shields]: https://github.com/badges/shields
 [bpb]: https://github.com/coreinfrastructure/best-practices-badge
 [internal replicas]: ../chapter-4/close_dependencies.md
-[snyk]: https://snyk.io/vuln?packageManager=npm
-[github graph]: https://github.com/blog/2447-a-more-connected-universe
+[failing]: ../chapter-6/failing.md
 [CRY]: ../chapter-1/threat-CRY.md
 [LQC]: ../chapter-1/threat-LQC.md
 [MTP]: ../chapter-1/threat-MTP.md

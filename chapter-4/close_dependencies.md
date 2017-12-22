@@ -85,10 +85,10 @@ Keeping a local replica narrows the window for [MTP][] attacks.
 Someone trying to inject malicious code has to have it up and
 available from `registry.npmjs.org` at the time the install script
 pulls it down which is hard for an attacker to predict.  There is a
-monoculture tradeoff --- having a smaller number of versions across all
-projects increases the potential reach of such an attack once
-successfully executed.  Centralized monitoring and reporting tilts in
-the defenders' favor though.
+monoculture tradeoff &mdash; having a smaller number of versions
+across all projects increases the potential reach of such an attack
+once successfully executed.  Centralized monitoring and reporting
+tilts in the defenders' favor though.
 
 Yarn provides most of the tools necessary to manage a local replica.
 

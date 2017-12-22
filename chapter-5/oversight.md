@@ -51,7 +51,7 @@ ESLint, but feedback about what can and can't be expressed in ESLint
 might give its maintainers useful feedback.
 
 Linters can reduce the burden on reviewers by enabling computer aided
-code review --- helping reviewers focus on areas that use powerful
+code review &mdash; helping reviewers focus on areas that use powerful
 APIs, and giving a sense of the kinds of problems to look out for.
 
 They can also give developers a sense of how controversial a review
@@ -140,9 +140,9 @@ Reviews should happen early and late.  When designing a system or a
 new feature, technical leads should engage specialists.  Before
 shipping, they should circle back to double check the implementation.
 During rapid development though, developers should drive development
---- they may ask questions, and may receive feedback (solicited and
-not), but ought not have to halt work while they wait for reviews from
-specialists.
+&mdash; they may ask questions, and may receive feedback (solicited
+and not), but ought not have to halt work while they wait for reviews
+from specialists.
 
 Some changes have a higher security impact than other, so
 some will require review by security specialists, but not most.

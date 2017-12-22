@@ -17,9 +17,10 @@ includes in its charter measures to route information about
 vulnerabilities and fixes to the right places, and coordinate response
 and disclosure.
 
-Package monitoring services like [snyk][], GitHub's
-[package graph][github graph], and the [nodejs-sec list][nodejs-sec]
-aim to help vulnerability reports get to those who need them.
+Package monitoring services like [nodesecurity], GitHub's
+[package graph][github graph], [snyk][], and the
+[nodejs-sec list][nodejs-sec] aim to help vulnerability reports get to
+those who need them.
 
 
 ## Problem
@@ -39,7 +40,7 @@ The computer security community has a
 [centralized naming scheme][CVE-IDs] for vulnerability reports so that
 reports don't fall through the cracks.  Security responders rarely
 have the luxury of dealing with a single stack much less a single
-layer of that stack so mailing lists are not sufficient --- if
+layer of that stack so mailing lists are not sufficient &mdash; if
 reporters roll their own naming scheme or only disclose via
 unstructured text, reports will fall through the cracks.
 
@@ -104,9 +105,9 @@ long as the attacker didn't get write access to the log file.
 Preventing log deletion by other processes is better handled by
 Linux's `FS_APPEND_FL` and similar mechanisms than in node.
 
-
-[snyk]: https://snyk.io/vuln?packageManager=npm
+[nodesecurity]: https://nodesecurity.io/advisories
 [github graph]: https://github.com/blog/2447-a-more-connected-universe
+[snyk]: https://snyk.io/vuln?packageManager=npm
 [nodejs-sec]: https://groups.google.com/group/nodejs-sec
 [CVE-IDs]: https://en.wikipedia.org/wiki/Common_Vulnerabilities_and_Exposures#CVE_identifiers
 [log injection]: https://www.owasp.org/index.php/Log_Injection

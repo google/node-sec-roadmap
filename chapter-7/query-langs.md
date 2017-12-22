@@ -117,10 +117,10 @@ function outputColumnsAndJoins(a, b, c) {
 
 Our goal was to make the easiest way to express an idea a secure way.
 
-As seen below, this template tag API is the shortest way to express this
-idea as shown below.  It is also tolerant to small variations --- the
-author may leave out quotes since the tag implementation knows whether
-a substitution is inside quotes.
+As seen below, this template tag API is the shortest way to express
+this idea as shown below.  It is also tolerant to small variations
+&mdash; the author may leave out quotes since the tag implementation
+knows whether a substitution is inside quotes.
 
 Shorter & tolerant != easier, but we hope that being shorter, more
 robust, more secure, and easy to compose will make it a good migration
