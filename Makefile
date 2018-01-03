@@ -1,3 +1,8 @@
+# This Makefile builds various versions of the Gitbook, runs
+# sanity checks, and sets up a deployment directory.
+#
+# See `make help`
+
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 # External dependency used to detect dead links
@@ -12,6 +17,41 @@ endif
 ifeq ($(CALIBER_HOME),)
   CALIBRE_HOME:=/Applications/calibre.app/Contents/console.app/Contents/MacOS/
 endif
+
+define HELP
+Targets
+=======
+`make server_static_files` starts a server to allow
+   browsing the book via localhost:4000
+`make book` puts HTML files under www/
+`make deploy` builds the deployment directory
+`make pdf` builds the PDF version
+`make check` runs sanity checks
+
+Setup
+=====
+This assumes that PATH includes
+   https://github.com/gjtorikian/html-proofer
+   https://calibre-ebook.com/download
+that the
+   HTML_PROOFER
+   CALIBRE_HOME
+environment variables point to reasonable values
+and that you have run
+   npm install
+to install gitbook and various other node dependencies.
+
+Deploying
+=========
+`make deploy` builds the deploy directory.
+From that directory `gcloud deploy --project node-sec-roadmap`
+deploys to the canonical location if you have the right
+privileges and have run `gcloud auth login`.
+endef
+export HELP
+
+help:
+	@echo "$$HELP"
 
 book.json : book.json.withcomments
 	@cat book.json.withcomments | perl -ne 'print unless m/^[ \t]*#/' > book.json

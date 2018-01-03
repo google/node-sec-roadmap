@@ -1,3 +1,4 @@
+# cloud.google.com/appengine/docs/standard/python/config/appref
 runtime: python27
 api_version: 1
 threadsafe: true
