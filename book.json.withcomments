@@ -9,13 +9,13 @@
     "language": "en",
     "gitbook": ">= 3.0.0",
     "plugins": [
-        "links"
-        # TODO: "ga" once we get a token
+        "links",
+        "ga"
     ],
     "pluginsConfig": {
         # Google Analytics integration
         "ga": {
-            "token": "TBD",
+            "token": "UA-111883728-1",
             "configuration": {
                 "anonymizeIp": true,
                 "forceSSL": true
