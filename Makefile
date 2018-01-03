@@ -61,5 +61,5 @@ deploy: book pdf
 	rm -rf deploy/
 	mkdir deploy/
 	cp app.yaml deploy/
-	cp book.pdf deploy/node-sec-roadmap.pdf
+	cp book.pdf deploy/www/node-sec-roadmap.pdf
 	cp -r www/ deploy/www/
