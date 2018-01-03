@@ -1,10 +1,11 @@
+app.yaml
 Makefile
 book.json.withcomments
 appendix/**/*.py
 appendix/**/*.textproto
 chapter-2/example/**/*.js
 chapter-2/experiments/**/*.js
-chapter-7/exa,ples/**/*.js
+chapter-7/examples/**/*.js
 **/*.sh
 third_party
 package.json

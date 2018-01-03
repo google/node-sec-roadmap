@@ -1,0 +1,59 @@
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /
+  static_files: www/index.html
+  upload: www/index.html
+  secure: always
+  mime_type: text/html; charset=UTF-8
+  expiration: 30m
+
+- url: /(.*[.]html)$
+  static_files: www/\1
+  upload: www/(.*[.]html)$
+  secure: always
+  mime_type: text/html; charset=UTF-8
+  expiration: 30m
+
+- url: /(.*[.]css)$
+  static_files: www/\1
+  upload: www/(.*[.]css)$
+  secure: always
+  mime_type: text/css; charset=UTF-8
+  expiration: 30m
+
+- url: /(.*[.]js)$
+  static_files: www/\1
+  upload: www/(.*[.]js)$
+  secure: always
+  mime_type: text/javascript; charset=UTF-8
+  expiration: 30m
+
+- url: /(.*[.]json)$
+  static_files: www/\1
+  upload: www/(.*[.]js)$
+  secure: always
+  mime_type: application/json; charset=UTF-8
+  expiration: 30m
+
+- url: /(.*[.]txt)$
+  static_files: www/\1
+  upload: www/(.*[.]txt)$
+  secure: always
+  mime_type: text/plain; charset=UTF-8
+  expiration: 30m
+
+- url: /(.*[.]svg)$
+  static_files: www/\1
+  upload: www/(.*[.]svg)$
+  secure: always
+  mime_type: image/svg+xml; charset=UTF-8
+  expiration: 30m
+
+- url: /(.*[.](ico|dot|eot|otf|png|ttf|woff|woff2|pdf))$
+  static_files: www/\1
+  upload: www/(.*[.](ico|eot|otf|png|ttf|woff|woff2))$
+  secure: always
+  expiration: 30m

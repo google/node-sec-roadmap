@@ -34,7 +34,7 @@
                     # this to work.
                     # TODO: Point to an authoritative version
                     # via absolute URL once published.
-                    "url": "/book.pdf"
+                    "url": "/node-sec-roadmap.pdf"
                 }
             ]
         }
