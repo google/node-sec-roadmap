@@ -3,6 +3,36 @@
 #
 # See `make help`
 
+define HELP
+Targets
+=======
+`make serve_static_files` starts a server to allow
+   browsing the book via localhost:4000
+`make book`   puts HTML files under www/
+`make deploy` builds the deployment directory
+`make pdf`   builds the PDF version
+`make check` runs sanity checks
+
+Setup
+=====
+This assumes that PATH includes
+   https://github.com/gjtorikian/html-proofer
+   https://calibre-ebook.com/download
+that the
+   HTML_PROOFER
+   CALIBRE_HOME
+environment variables point to reasonable values.
+
+Deploying
+=========
+`make deploy` builds the deploy directory.
+From that directory `gcloud deploy --project node-sec-roadmap`
+deploys to the canonical location if you have the right
+privileges and have run `gcloud auth login`.
+endef
+export HELP
+
+
 ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 # External dependency used to detect dead links
@@ -14,41 +44,9 @@ ifeq ($(HTML_PROOFER),)
 endif
 
 # External dependency used to build pdf
-ifeq ($(CALIBER_HOME),)
+ifeq ($(CALIBRE_HOME),)
   CALIBRE_HOME:=/Applications/calibre.app/Contents/console.app/Contents/MacOS/
 endif
-
-define HELP
-Targets
-=======
-`make server_static_files` starts a server to allow
-   browsing the book via localhost:4000
-`make book` puts HTML files under www/
-`make deploy` builds the deployment directory
-`make pdf` builds the PDF version
-`make check` runs sanity checks
-
-Setup
-=====
-This assumes that PATH includes
-   https://github.com/gjtorikian/html-proofer
-   https://calibre-ebook.com/download
-that the
-   HTML_PROOFER
-   CALIBRE_HOME
-environment variables point to reasonable values
-and that you have run
-   npm install
-to install gitbook and various other node dependencies.
-
-Deploying
-=========
-`make deploy` builds the deploy directory.
-From that directory `gcloud deploy --project node-sec-roadmap`
-deploys to the canonical location if you have the right
-privileges and have run `gcloud auth login`.
-endef
-export HELP
 
 help:
 	@echo "$$HELP"
