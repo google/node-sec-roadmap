@@ -6,27 +6,26 @@
 define HELP
 Targets
 =======
-`make serve_static_files` starts a server to allow
-   browsing the book via localhost:4000
-`make book`   puts HTML files under www/
-`make deploy` builds the deployment directory
-`make pdf`   builds the PDF version
-`make check` runs sanity checks
+`make book`         puts HTML files under www/
+`make pdf`          builds the PDF version
+`make serve_static` serve the book from http://localhost:4000/
+`make serve`        launch the builtin gitbook debug server
+`make check`        runs sanity checks
+`make deploy`       builds the deployment directory and runs checks
 
 Setup
 =====
 This assumes that PATH includes
    https://github.com/gjtorikian/html-proofer
    https://calibre-ebook.com/download
-that the
-   HTML_PROOFER
-   CALIBRE_HOME
-environment variables point to reasonable values.
+that the following environment variables point to reasonable values:
+   HTML_PROOFER   # path to htmlproofer executable
+   CALIBRE_HOME   # path to directory containing calibre executables
 
 Deploying
 =========
 `make deploy` builds the deploy directory.
-From that directory `gcloud deploy --project node-sec-roadmap`
+From that directory `gcloud app deploy --project node-sec-roadmap`
 deploys to the canonical location if you have the right
 privileges and have run `gcloud auth login`.
 endef
@@ -48,28 +47,34 @@ ifeq ($(CALIBRE_HOME),)
   CALIBRE_HOME:=/Applications/calibre.app/Contents/console.app/Contents/MacOS/
 endif
 
+
+# Bits that gitbook depends on
+GITBOOK_DEPS := node_modules book.json README.md SUMMARY.md CONTRIBUTORS.md \
+		$(wildcard chapter-*/*.md) appendix/README.md \
+		styles/website.css images/*
+
+
 help:
 	@echo "$$HELP"
 
 book.json : book.json.withcomments
-	@cat book.json.withcomments | perl -ne 'print unless m/^[ \t]*#/' > book.json
+	@cat book.json.withcomments \
+	| perl -ne 'print unless m/^[ \t]*#/' > book.json
 
-book : www/.tstamp check
+pdf : www/node-sec-roadmap.pdf
+www/node-sec-roadmap.pdf : $(GITBOOK_DEPS)
+	PATH="${PATH}:./node_modules/.bin/:${CALIBRE_HOME}" \
+	    ./node_modules/.bin/gitbook pdf . www/node-sec-roadmap.pdf
 
-pdf : book.pdf
-
-book.pdf : node_modules book.json README.md SUMMARY.md $(wildcard chapter-*/*.md) appendix/README.md CONTRIBUTORS.md styles/website.css images/*
-	PATH="${PATH}:./node_modules/.bin/:${CALIBRE_HOME}" ./node_modules/.bin/gitbook pdf
-
-www/.tstamp : node_modules book.json README.md SUMMARY.md $(wildcard chapter-*/*.md) appendix/README.md CONTRIBUTORS.md styles/website.css images/*
+book : www/.book.tstamp
+www/.book.tstamp : $(GITBOOK_DEPS)
 	"${ROOT_DIR}"/node_modules/.bin/gitbook build . www
-	touch www/.tstamp
+	@touch www/.book.tstamp
 
-check : check.tstamp
-
-check.tstamp : www/.tstamp
-	touch check.tstamp
-	@! find www/ -name \*.html \
+check : .check.tstamp
+.check.tstamp : deploy/.deploy.tstamp
+	touch .check.tstamp
+	@! find deploy/www/ -name \*.html \
 	    | xargs egrep '\]\[|[nN][oO][dD][eE]J[sS]|\bN[Pp][Mm]\b' \
 	    | egrep -v 'x\[a\]\[b\]|this\[x\]\['
 	@if [ "${HTML_PROOFER}" = "/bin/echo" ]; then \
@@ -78,9 +83,11 @@ check.tstamp : www/.tstamp
 		echo Running htmlproofer; \
 		"${HTML_PROOFER}" \
 		  --alt-ignore=example/graphs/full.svg \
-		  --url-ignore="https://github.com/google/node-sec-roadmap/,https://github.com/google/node-sec-roadmap/issues,../node-sec-roadmap.pdf,node-sec-roadmap.pdf,https://github.com/google/node-sec-roadmap/tree/master/appendix,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sh,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sql,https://github.com/google/node-sec-roadmap/tree/master/chapter-2/experiments/webpack-compat,https://github.com/google/node-sec-roadmap/blob/6130b76446ff4efbb276d8128c12e41ea2fffbc9/chapter-2/example/make_dep_graph.sh#L39-L73,https://github.com/google/node-sec-roadmap/blob/master/chapter-2/example/make_dep_graph.sh" \
-		  "${ROOT_DIR}"/www/; \
+		  --url-ignore="https://github.com/google/node-sec-roadmap/,https://github.com/google/node-sec-roadmap/issues,https://github.com/google/node-sec-roadmap/tree/master/appendix,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sh,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sql,https://github.com/google/node-sec-roadmap/tree/master/chapter-2/experiments/webpack-compat,https://github.com/google/node-sec-roadmap/blob/6130b76446ff4efbb276d8128c12e41ea2fffbc9/chapter-2/example/make_dep_graph.sh#L39-L73,https://github.com/google/node-sec-roadmap/blob/master/chapter-2/example/make_dep_graph.sh" \
+		  "${ROOT_DIR}"/deploy/www/; \
 	fi
+	@find deploy -name node_modules \
+	    || (echo "deploy/ should not include node_modules"; false)
 
 serve : book
 	"${ROOT_DIR}"/node_modules/.bin/gitbook serve
@@ -89,15 +96,16 @@ serve_static_files : book
 	pushd www; python -m SimpleHTTPServer 4000; popd
 
 clean :
-	rm -rf www/ book.pdf _book book.json deploy/
+	rm -rf www/ deploy/ _book/ book.json .*.tstamp
 
 node_modules : package.json
 	npm install --only=prod
-	touch node_modules/
+	@touch node_modules/
 
-deploy: book pdf
+deploy : deploy/.deploy.tstamp check
+deploy/.deploy.tstamp : book pdf app.yaml
 	rm -rf deploy/
 	mkdir deploy/
 	cp app.yaml deploy/
 	cp -r www/ deploy/www/
-	cp book.pdf deploy/www/node-sec-roadmap.pdf
+	@touch deploy/.deploy.tstamp
