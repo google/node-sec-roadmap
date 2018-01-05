@@ -76,7 +76,7 @@ that, if more widespread, might make it easier for developers to
 produce secure, robust systems.
 
 
-[contributors]: ../CONTRIBUTORS.md
+[contributors]: CONTRIBUTORS.md
 [Threat environment]: chapter-1/threats.md
 [Dynamism when you need it]: chapter-2/dynamism.md
 [Knowing your dependencies]: chapter-3/knowing_dependencies.md
