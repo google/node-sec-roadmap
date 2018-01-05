@@ -1,2 +1,0 @@
-Contact: mikesamuel@gmail.com
-Acknowledgement: https://github.com/google/node-sec-roadmap/tree/master/ACKNOWLEDGEMENTS.md
