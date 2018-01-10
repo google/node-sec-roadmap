@@ -3,6 +3,6 @@
 * [Jen Tong](https://github.com/mimming)
 * [John J. Barton](https://github.com/johnjbarton)
 * [Justin Beckwith](https://github.com/JustinBeckwith)
-* Mark S. Miller
+* [Mark S. Miller](https://github.com/erights)
 * [Mike Samuel](https://github.com/mikesamuel)
 * [Myles Borins](https://github.com/mylesborins)
