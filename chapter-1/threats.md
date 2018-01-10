@@ -4,9 +4,10 @@ The threat environment for Node.js is similar to that for other runtimes that
 are primarily used for microservices and web frontends, but there are some
 Node.js specific concerns.
 
-We define both kinds of threats below.  A reader familiar with web-application
-security can skip all but the first and last section without missing much, but
-may find it useful to refer back to the table when reading later pages.
+We define both kinds of threats below.  A reader familiar with
+web-application security can skip all but this page and the discussion
+of [*unintended require*][UIR] without missing much, but may find it
+helpful to refer back to the table below when reading later chapters.
 
 ## Server vs Client-side JavaScript
 
@@ -23,7 +24,7 @@ client-side JavaScript.  For example,
 * Client-side JavaScript typically only has access to data that the
   human using the browser should have access to.  On the server,
   applications are responsible for **data [compartmentalization][]**,
-  and server-side JavaScript also has direct access to storage
+  and server-side JavaScript often has privileged access to storage
   systems and other backends.
 * **File-system access** by the client typically either requires human
   interaction
@@ -45,7 +46,8 @@ client-side JavaScript.  For example,
   ([code][threads-a-gogo]) and a [workers proposal][]
   allow server-side JavaScript to fork threads; it is
   unclear how widespread these are in production or how
-  [susceptible][thread corner cases] these are to memory corruption.
+  [susceptible][thread corner cases] these are to memory corruption
+  or exploitable race conditions.
 
 The threat environment for server-side JavaScript is much closer to
 that for any other server-side framework than JavaScript in the
