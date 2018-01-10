@@ -83,6 +83,26 @@ columns, and link to the discussion.
 | [SHP][]   | Shell injection on a production machine.                                              | Low       | High     | [ovrsi][m-os] [cproc][m-cp] |
 | [UIR][]   | `require(untrustworthyInput)` loads code not intended for production.                 | Low       | Low-High | [dynam][m-dy]               |
 
+
+## Meltdown and Spectre
+
+As of this writing, the security community is trying to digest
+the implications of *Meltdown* and *Spectre*.  The
+[Node.js blog][Meltdown Spectre Impact] addresses them from a
+Node.js perspective, so we do not comment in depth.
+
+It is worth noting though that those vulnerabilities lead to
+breaches of *confidentiality*.  While confidentiality violations
+are serious, the suggestions that follow use design principles
+that prevent a violation of confidentiality from causing a
+violation of *integrity*.  Specifically:
+
+*  Knowing a whitelist of production source hashes does not
+   allow an attacker to cause a non-production source to load.
+*  Our runtime `eval` mitigation relies on JavaScript reference
+   equality, not knowledge of a secret.
+
+
 [same-origin policy]: https://developer.mozilla.org/en-US/docs/Web/Security/Same-origin_policy
 [CSP]: https://developers.google.com/web/fundamentals/security/csp/
 [compartmentalization]: https://cwe.mitre.org/data/definitions/653.html
@@ -110,3 +130,4 @@ columns, and link to the discussion.
 [m-fa]: ../chapter-6/failing.md
 [m-cp]: ../chapter-7/child-processes.md
 [m-ql]: ../chapter-7/query-langs.md
+[Meltdown Spectre Impact]: https://nodejs.org/en/blog/vulnerability/jan-2018-spectre-meltdown/
