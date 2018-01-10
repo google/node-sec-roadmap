@@ -55,6 +55,6 @@ handlers:
 
 - url: /(.*[.](ico|dot|eot|otf|png|ttf|woff|woff2|pdf))$
   static_files: www/\1
-  upload: www/(.*[.](ico|eot|otf|png|ttf|woff|woff2))$
+  upload: www/(.*[.](ico|dot|eot|otf|png|ttf|woff|woff2|pdf))$
   secure: always
   expiration: 30m
