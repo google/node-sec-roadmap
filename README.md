@@ -5,7 +5,7 @@ authors built around a mature and well-maintained core runtime and
 library set.  Its growing popularity is already drawing more attention
 from attackers.  This roadmap discusses how some Node.js projects
 address security challenges, along with ways to make it easier
-for other projects to address these challenges in a thorough and
+for more projects to address these challenges in a thorough and
 consistent manner.
 
 This is not the opinion of any organization.  It is the considered
@@ -73,6 +73,7 @@ of security professionals to identify and respond to imminent threats.
 that, if more widespread, might make it easier for developers to
 produce secure, robust systems.
 
+You can browse the supporting code via *[github.com/google/node-sec-roadmap/][]*.
 
 [contributors]: CONTRIBUTORS.md
 [Threat environment]: chapter-1/threats.md
@@ -82,3 +83,4 @@ produce secure, robust systems.
 [Oversight]: chapter-5/oversight.md
 [When all else fails]: chapter-6/failing.md
 [Library support for safe coding practices]: chapter-7/libraries.md
+[github.com/google/node-sec-roadmap/]: https://github.com/google/node-sec-roadmap/
