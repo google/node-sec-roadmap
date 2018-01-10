@@ -4,7 +4,7 @@ The threat environment for Node.js is similar to that for other runtimes that
 are primarily used for microservices and web frontends, but there are some
 Node.js specific concerns.
 
-We define both kinds of threats below.  A reader familiar with
+We define both kinds of threats in this section.  A reader familiar with
 web-application security can skip all but this page and the discussion
 of [*unintended require*][UIR] without missing much, but may find it
 helpful to refer back to the table below when reading later chapters.
