@@ -34,7 +34,7 @@ handlers:
 
 - url: /(.*[.]json)$
   static_files: www/\1
-  upload: www/(.*[.]js)$
+  upload: www/(.*[.]json)$
   secure: always
   mime_type: application/json; charset=UTF-8
   expiration: 30m
