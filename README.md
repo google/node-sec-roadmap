@@ -2,13 +2,11 @@
 
 Node.js has a vibrant community of application developers and library
 authors built around a mature and well-maintained core runtime and
-library set.  However there are specific security concerns that a
-primary target needs to address before using Node.js for public facing
-applications and services.
-
-This document discusses how some Node.js projects address these
-concerns, along with ways to make it easier for other projects to
-address these concerns in a thorough and consistent manner.
+library set.  Its growing popularity is already drawing more attention
+from attackers.  This roadmap discusses how some Node.js projects
+address security challenges, along with ways to make it easier
+for other projects to address these challenges in a thorough and
+consistent manner.
 
 This is not the opinion of any organization.  It is the considered
 opinion of
@@ -30,8 +28,8 @@ vulnerability.  One goes out of their way to find vulnerabilities in
 the former.  The practices which prevent one from becoming a target of
 opportunity might not be enough if one is a primary target of an actor
 with resources at their disposal.  We hope that the ideas we present
-would help primary targets to defeat attacks while making targets of
-opportunity become rare and the entire ecosystem more secure.
+might help primary targets to defeat attacks while making targets of
+opportunity rarer and the entire ecosystem more secure.
 
 When addressing threats, we want to make sure we preserve Node.js's
 strengths.
