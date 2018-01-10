@@ -83,7 +83,6 @@ check : .check.tstamp
 		echo Running htmlproofer; \
 		"${HTML_PROOFER}" \
 		  --alt-ignore=example/graphs/full.svg \
-		  --url-ignore="https://github.com/google/node-sec-roadmap/,https://github.com/google/node-sec-roadmap/issues,https://github.com/google/node-sec-roadmap/tree/master/appendix,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sh,https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sql,https://github.com/google/node-sec-roadmap/tree/master/chapter-2/experiments/webpack-compat,https://github.com/google/node-sec-roadmap/blob/6130b76446ff4efbb276d8128c12e41ea2fffbc9/chapter-2/example/make_dep_graph.sh#L39-L73,https://github.com/google/node-sec-roadmap/blob/master/chapter-2/example/make_dep_graph.sh" \
 		  "${ROOT_DIR}"/deploy/www/; \
 	fi
 	@find deploy -name node_modules \
