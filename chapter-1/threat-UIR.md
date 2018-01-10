@@ -50,7 +50,7 @@ vulnerability into an arbitrary code execution vulnerabilities.
 There are many modules `$m` such that `npm install "$m"` places test
 or example files under `node_modules/$m`.
 
-[Experiments](../appendix/README.md#test_code) show that, of the
+[Experiments](../appendix/experiments.md#test_code) show that, of the
 top 108 most commonly used modules, 50 (46.30%) include test or
 example code.  Some of these modules, like `mocha`, are most
 often loaded as dev dependencies, but `npm install --only=prod`
@@ -98,7 +98,7 @@ real user data nor receive untrusted inputs.
 The primary vector for this vulnerability is dynamic code loading:
 calling `require(...)` with an argument other than a literal string.
 
-To assess the severity of this issue, we [examined](../appendix/README.md)
+To assess the severity of this issue, we [examined](../appendix/experiments.md)
 the 108 most popular npm modules.
 
 34 of the top 108 most popular npm modules (30%) call `require(...)`
@@ -106,7 +106,7 @@ without a literal string argument or have a non-test dependency that
 does.  This is after imperfect heuristics to filter out non-production
 code.  If we assume, conservatively, that uses of `require` that are
 not immediate calls are dynamic load vectors, then the proportion
-rises to 50%.  See [appendix](../appendix/README.md#dynamic_load).
+rises to 50%.  See [appendix](../appendix/experiments.md#dynamic_load).
 
 Below are the results of a manual human review of dynamic loads in
 popular npm modules.  There seem to be few clear vulnerabilities among

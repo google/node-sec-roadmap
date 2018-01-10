@@ -20,12 +20,12 @@ many operators that convert strings to code when given a string
 do something else when given a `Function` instance.
 `setTimeout(x, 0)` is safe when `x` is a function.
 
-*  [Grepping](../appendix/README.md#grep-problems) shows the rate
+*  [Grepping](../appendix/experiments.md#grep-problems) shows the rate
    in the top 100 modules and their transitive dependencies by simple
    pattern matching after filtering out comments and string content.
    This analysis works on most modules, but fails to distinguish
    safe uses of `setTimeout` for example from unsafe.
-*  A [type based analysis](../appendix/README.md#jsconf) can
+*  A [type based analysis](../appendix/experiments.md#jsconf) can
    distinguish between those two, but the tools we tested don't
    deal well with mixed JavaScript and TypeScript inputs.
 
