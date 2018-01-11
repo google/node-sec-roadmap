@@ -36,6 +36,11 @@
                     # TODO: Point to an authoritative version
                     # via absolute URL once published.
                     "url": "/node-sec-roadmap.pdf"
+                },
+                {
+                    "label": "Github",
+                    "icon": "github-button",
+                    "url": "https://github.com/google/node-sec-roadmap"
                 }
             ]
         }

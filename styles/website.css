@@ -24,6 +24,17 @@
     background-position: center center;
 }
 
+.github-button.btn.links-link {
+    display: inline-block;
+    width: 30px;
+    font-size: 0;
+    background-image: url("/images/GitHub-Mark-32px.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 20px;
+    opacity: 0.25;
+}
+
 /* Style external links */
 a[href^="http://"]:not([href^="http://www.gitbook.com"]),
 a[href^="https://"]:not([href^="https://www.gitbook.com"]),
