@@ -74,9 +74,12 @@ www/.book.tstamp : $(GITBOOK_DEPS)
 check : .check.tstamp
 .check.tstamp : deploy/.deploy.tstamp
 	touch .check.tstamp
+	echo Checking that we correctly capitalize npm and Nodejs
+	echo and that all Markdown link names are defined.
 	@! find deploy/www/ -name \*.html \
 	    | xargs egrep '\]\[|[nN][oO][dD][eE]J[sS]|\bN[Pp][Mm]\b' \
-	    | egrep -v 'x\[a\]\[b\]|this\[x\]\['
+	    | egrep -v 'x\[a\]\[b\]|this\[x\]\[|[.]jfrog[.]com/'
+	echo Checking for dead links
 	@if [ "${HTML_PROOFER}" = "/bin/echo" ]; then \
 		echo "Warning: HTML_PROOFER not available"; \
 	else \

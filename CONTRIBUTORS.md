@@ -6,3 +6,7 @@
 * [Mark S. Miller](https://github.com/erights)
 * [Mike Samuel](https://github.com/mikesamuel)
 * [Myles Borins](https://github.com/mylesborins)
+
+Special thanks for feedback and criticism:
+
+* [Matteo Collina](https://github.com/mcollina)
