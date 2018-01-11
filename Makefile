@@ -88,7 +88,7 @@ check : .check.tstamp
 	@find deploy -name node_modules \
 	    || (echo "deploy/ should not include node_modules"; false)
 
-serve : book
+serve : $(GITBOOK_DEPS)
 	"${ROOT_DIR}"/node_modules/.bin/gitbook serve
 
 serve_static_files : book

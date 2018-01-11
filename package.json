@@ -22,7 +22,6 @@
   },
   "private": true,
   "scripts": {
-    "start": "make serve",
-    "postinstall": "make book"
+    "start": "make serve"
   }
 }
