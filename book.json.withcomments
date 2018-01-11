@@ -2,6 +2,7 @@
 {
     "root": ".",
     "structure": {
+        "readme": "cover.md"
     },
     "title": "A Roadmap for Node.js Security",
     "description": "Discusses security and privacy threats to the Node.js community and ways the community might address them.  Assumes a basic familiarity with JS & the Node ecosystem.",

@@ -49,7 +49,7 @@ endif
 
 
 # Bits that gitbook depends on
-GITBOOK_DEPS := node_modules book.json README.md SUMMARY.md CONTRIBUTORS.md \
+GITBOOK_DEPS := node_modules book.json cover.md SUMMARY.md CONTRIBUTORS.md \
 		$(wildcard chapter-*/*.md) appendix/experiments.md \
 		styles/website.css images/*
 
