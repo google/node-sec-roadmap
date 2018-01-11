@@ -57,7 +57,7 @@ browser.
 
 The table below lists broad classes of vulnerabilities, and for each,
 a short identifier by which we refer to the class later in this
-document.  This list is not meant to be a comprehensive, but we expect
+document.  This list is not meant to be comprehensive, but we expect
 that a thorough security assessment would touch on most of these and
 would have low confidence in an assessment that skips many.
 
