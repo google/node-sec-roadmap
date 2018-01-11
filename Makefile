@@ -94,7 +94,7 @@ check : .check.tstamp
 serve : $(GITBOOK_DEPS)
 	"${ROOT_DIR}"/node_modules/.bin/gitbook serve
 
-serve_static_files : book
+serve_static : book
 	pushd www; python -m SimpleHTTPServer 4000; popd
 
 clean :
