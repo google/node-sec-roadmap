@@ -10,8 +10,8 @@ connection.query(
     callback);
 ```
 
-If an attacker controls value, and can cause it to contain a single
-quote, they can cause execution of a querya with  different structure.
+If an attacker controls `value` and can cause it to contain a single
+quote, then they can cause execution of a query with a different structure.
 For example, if they can cause
 
 ```js
