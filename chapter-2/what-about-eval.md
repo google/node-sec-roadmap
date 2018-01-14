@@ -5,9 +5,8 @@ from the file system, but not what code loads from strings.
 
 The rest of this discussion uses the term "`eval`" to refer to any of
 the `eval` operator, the `eval` function, `new Function`,
-`setTimeout(string, dt)`, `vm.runIn*Context`, `vm.Script.run*`,
-[`WebAssembly.compile`][] and other operators
-that convert strings or bytes into code.
+`vm.runIn*Context`, `vm.Script.run*`, [`WebAssembly.compile`][]
+and other operators that convert strings or bytes into code.
 
 Recall that it is difficult to prove that code
 [does not `eval`](../chapter-1/threat-RCE.md):

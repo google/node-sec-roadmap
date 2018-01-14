@@ -2,10 +2,10 @@
 
 Remote code execution occurs when the application interprets an
 untrustworthy string as code.  When `x` is a string, `eval(x)`,
-`Function(x)`, and `vm.runIn*Context(x)` all
-invoke the JavaScript engine's parser on `x`.  If an attacker controls
-`x` then they can run arbitrary code in the context of the CommonJS
-module or `vm` context that invoked the parser.
+`Function(x)`, and `vm.runIn*Context(x)` all invoke the JavaScript
+engine's parser on `x`.  If an attacker controls `x` then they can run
+arbitrary code in the context of the CommonJS module or `vm` context
+that invoked the parser.
 
 Sandboxing can help but widely available sandboxes have
 [known workarounds][denicola-vm-run] though the [frozen realms][]
@@ -15,16 +15,18 @@ It is harder to execute remote code in server-side JavaScript.
 `this[x][y] = "javascript:console.log(1)"` does not cause code to
 execute for nearly as many `x` and `y` as in a browser.
 
-These operators are probably rarely used *explicitly*, but
-many operators that convert strings to code when given a string
-do something else when given a `Function` instance.
-`setTimeout(x, 0)` is safe when `x` is a function.
+These operators are probably rarely used *explicitly*, but some
+operators that convert strings to code when given a string do
+something else when given a `Function` instance.  `setTimeout(x, 0)`
+is safe when `x` is a function, but on the browser it parses a string
+input as code.
 
 *  [Grepping](../appendix/experiments.md#grep-problems) shows the rate
    in the top 100 modules and their transitive dependencies by simple
    pattern matching after filtering out comments and string content.
    This analysis works on most modules, but fails to distinguish
-   safe uses of `setTimeout` for example from unsafe.
+   safe uses of `setTimeout` in modules that might run on
+   the client from unsafe.
 *  A [type based analysis](../appendix/experiments.md#jsconf) can
    distinguish between those two, but the tools we tested don't
    deal well with mixed JavaScript and TypeScript inputs.
