@@ -2,7 +2,7 @@
 
 Remote code execution occurs when the application interprets an
 untrustworthy string as code.  When `x` is a string, `eval(x)`,
-`setTimeout(x, 0)`, `Function(x)`, and `vm.runIn*Context(x)` all
+`Function(x)`, and `vm.runIn*Context(x)` all
 invoke the JavaScript engine's parser on `x`.  If an attacker controls
 `x` then they can run arbitrary code in the context of the CommonJS
 module or `vm` context that invoked the parser.
