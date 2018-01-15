@@ -10,7 +10,7 @@ problem and several solutions, none of which are ideal.
    point of failure.
 *  An extra `npm shrinkwrap` step is necessary to ensure that
    the versions used during testing are the same as the versions
-   deployed (Shore's analysis predates [package locks][], or
+   deployed (Shore's analysis predates [package locks][]), or
 *  Developers check `node_modules` into revision control which
    may include architecture-specific binaries.
 *  Local changes may be silently lost when re-installed on a dev
