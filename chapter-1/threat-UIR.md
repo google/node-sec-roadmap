@@ -64,7 +64,7 @@ We need to keep test code from loading in production.
 
 Good developers do and should be able to do things in test code that
 would be terrible ideas in production code.  It is not uncommon to
-find in test code that:
+find test code that:
 
 -  changes global configuration so that they can run tests under
    multiple different configurations.
