@@ -1,19 +1,28 @@
 {
-    "name": "mysql-template-tag",
-    "description": "demonstrates tagged templates for safely composing SQL",
-    "version": "0.0.0",
-    "main": "index.js",
-    "dependencies": {
-        "mysql": "2.15.0"
-    },
-    "scripts": {
-        "test": "./node_modules/.bin/standard && TZ=GMT ./node_modules/.bin/mocha"
-    },
-    "author": "Mike Samuel",
-    "license": "Apache-2.0",
-    "devDependencies": {
-        "chai": ">=4.1.2",
-        "mocha": ">=4.0.1",
-        "standard": "*"
-    }
+  "name": "mysql-template-tag",
+  "description": "demonstrates tagged templates for safely composing SQL",
+  "version": "0.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "mysql": "2.15.0"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/standard && ./node_modules/.bin/eslint . && TZ=GMT ./node_modules/.bin/mocha"
+  },
+  "author": "Mike Samuel",
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "chai": ">=4.1.2",
+    "eslint": ">=4.15.0",
+    "eslint-config-strict": "*",
+    "eslint-config-standard": "*",
+    "mocha": ">=4.0.1",
+    "standard": "*"
+  },
+  "eslintConfig": {
+    "extends": [
+      "strict",
+      "standard"
+    ]
+  }
 }

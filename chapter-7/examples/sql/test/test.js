@@ -15,16 +15,16 @@
  * limitations under the License.
  */
 
-// test/test.js
+/* eslint "no-magic-numbers": off */
 
-const expect = require('chai').expect
-const {describe, it} = require('mocha')
+const { expect } = require('chai')
+const { describe, it } = require('mocha')
 const index = require('../index')
 
 function tokens (...chunks) {
-  let lexer = index.makeLexer()
-  let out = []
-  for (let i = 0, n = chunks.length; i < n; ++i) {
+  const lexer = index.makeLexer()
+  const out = []
+  for (let i = 0, len = chunks.length; i < len; ++i) {
     out.push(lexer(chunks[i]) || '_')
   }
   return out.join(',')
@@ -83,7 +83,7 @@ describe('sql template tags', () => {
       if (result instanceof index.SqlFragment) {
         result = result.toString()
       } else {
-        throw new Error('Expected SqlFragment not ' + result)
+        throw new Error(`Expected SqlFragment not ${result}`)
       }
       expect(result).to.equal(golden)
     }
@@ -111,13 +111,13 @@ describe('sql template tags', () => {
         () => index.sql`SELECT ${new index.Identifier('foo')}`)
     })
     it('fragment', () => {
-      let fragment = new index.SqlFragment('1 + 1')
+      const fragment = new index.SqlFragment('1 + 1')
       runTagTest(
         `SELECT 1 + 1`,
         () => index.sql`SELECT ${fragment}`)
     })
     it('fragment no token merging', () => {
-      let fragment = new index.SqlFragment('1 + 1')
+      const fragment = new index.SqlFragment('1 + 1')
       runTagTest(
         `SELECT 1 + 1 FROM T`,
         () => index.sql`SELECT${fragment}FROM T`)
@@ -166,13 +166,12 @@ describe('sql template tags', () => {
         () => index.sql`SELECT \`foo_${123}\``)
     })
     it('array', () => {
-      let id = new index.Identifier('foo')
-      let frag = new index.SqlFragment('1 + 1')
-      let values = [123, 'foo', id, frag]
+      const id = new index.Identifier('foo')
+      const frag = new index.SqlFragment('1 + 1')
+      const values = [ 123, 'foo', id, frag ]
       runTagTest(
         "SELECT X FROM T WHERE X IN (123, 'foo', `foo`, 1 + 1)",
-        () =>
-          index.sql`SELECT X FROM T WHERE X IN (${values})`)
+        () => index.sql`SELECT X FROM T WHERE X IN (${values})`)
     })
   })
 })

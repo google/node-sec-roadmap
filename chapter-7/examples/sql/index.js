@@ -35,22 +35,33 @@ const mysql = require('mysql')
 // doubled delimiters and backslash both escape
 // doubled delimiters work in `...` identifiers
 
-const _PREFIX_BEFORE_DELIMITER = new RegExp(
+const PREFIX_BEFORE_DELIMITER = new RegExp(
   '^(?:' +
-    (  // Comment
-        '--(?=[\\t\\r\\n ])[^\\r\\n]*' +
-        '|#[^\\r\\n]*' +
-        '|/[*][\\s\\S]*?[*]/'
+    (
+      // Comment
+      '--(?=[\\t\\r\\n ])[^\\r\\n]*' +
+      '|#[^\\r\\n]*' +
+      '|/[*][\\s\\S]*?[*]/'
     ) +
-    '|' + (
+    '|' +
+    (
       // Run of non-comment non-string starts
       '(?:[^\'"`\\-/#]|-(?!-)|/(?![*]))'
     ) +
     ')*')
-const _DELIMITED_BODIES = {
+const DELIMITED_BODIES = {
   '\'': /^(?:[^'\\]|\\[\s\S]|'')*/,
   '"': /^(?:[^"\\]|\\[\s\S]|"")*/,
   '`': /^(?:[^`\\]|\\[\s\S]|``)*/
+}
+
+/** Template tag that creates a new Error with a message. */
+function msg (strs, ...dyn) {
+  let message = String(strs[0])
+  for (let i = 0; i < dyn.length; ++i) {
+    message += JSON.stringify(dyn[i]) + strs[i + 1]
+  }
+  return message
 }
 
 /**
@@ -58,41 +69,40 @@ const _DELIMITED_BODIES = {
  * returns a delimiter context.
  */
 function makeLexer () {
-  let error = null
+  let errorMessage = null
   let delimiter = null
   return (text) => {
-    if (error) {
-      throw error
+    if (errorMessage) {
+      // Replay the error message if we've already failed.
+      throw new Error(errorMessage)
     }
     text = String(text)
     while (text) {
-      let pattern = delimiter
-          ? _DELIMITED_BODIES[delimiter]
-          : _PREFIX_BEFORE_DELIMITER
-      let match = pattern.exec(text)
+      const pattern = delimiter
+        ? DELIMITED_BODIES[delimiter]
+        : PREFIX_BEFORE_DELIMITER
+      const match = pattern.exec(text)
       if (!match) {
-        throw (error = new Error(
-          'Failed to lex starting at ' + JSON.stringify(text)))
+        throw new Error(
+          errorMessage = msg`Failed to lex starting at ${text}`)
       }
       let nConsumed = match[0].length
       if (text.length > nConsumed) {
-        let c = text.charAt(nConsumed)
+        const chr = text.charAt(nConsumed)
         if (delimiter) {
-          if (c === delimiter) {
+          if (chr === delimiter) {
             delimiter = null
             ++nConsumed
           } else {
-            throw (error = new Error(
-              'Expected \\' + c + ' at ' + JSON.stringify(text)))
+            throw new Error(
+              errorMessage = msg`Expected ${chr} at ${text}`)
           }
+        } else if (Object.hasOwnProperty.call(DELIMITED_BODIES, chr)) {
+          delimiter = chr
+          ++nConsumed
         } else {
-          if (Object.hasOwnProperty.call(_DELIMITED_BODIES, c)) {
-            delimiter = c
-            ++nConsumed
-          } else {
-            throw (error = new Error(
-              'Expected delimiter at ' + JSON.stringify(text)))
-          }
+          throw new Error(
+            errorMessage = msg`Expected delimiter at ${text}`)
         }
       }
       text = text.substring(nConsumed)
@@ -102,8 +112,8 @@ function makeLexer () {
 }
 
 /** A string wrapper that marks its content as a SQL identifier. */
-function Identifier (s) {
-  const content = String(s)
+function Identifier (str) {
+  const content = String(str)
   if (!content) {
     throw new Error('blank content')
   }
@@ -113,7 +123,7 @@ function Identifier (s) {
   }
   this.content = content
 }
-Identifier.prototype.toString = function () {
+Identifier.prototype.toString = function toString () {
   return String(this.content)
 }
 
@@ -121,8 +131,8 @@ Identifier.prototype.toString = function () {
  * A string wrapper that marks its content as a series of
  * well-formed SQL tokens.
  */
-function SqlFragment (s) {
-  const content = String(s)
+function SqlFragment (str) {
+  const content = String(str)
   if (!content) {
     throw new Error('blank content')
   }
@@ -132,7 +142,7 @@ function SqlFragment (s) {
   }
   this.content = content
 }
-SqlFragment.prototype.toString = function () {
+SqlFragment.prototype.toString = function toString () {
   return String(this.content)
 }
 
@@ -140,116 +150,129 @@ SqlFragment.prototype.toString = function () {
 const memoTable = new WeakMap()
 
 /**
- * Template tag function that contextually autoescapes values
- * producing a SqlFragment.
+ * Analyzes the static parts of the tag content.
+ *
+ * @return An record like { delimiters, chunks }
+ *     where delimiter is a contextual cue and chunk is
+ *     the adjusted raw text.
  */
-function sql (strings, ...values) {
-  let raw = strings.raw
+function computeStatic (raw) {
+  const delimiters = []
+  const chunks = []
 
-  // A buffer to accumulate the result.
-  let result = ''
-
-  // Used to find contexts.
-  let lexer
-
-  // We use a function that replays already parsed contexts where
-  // possible.  If we can't, we collect the contexts on the delimiters
-  // array so we can put them in the memoTable at the end.
-  let delimiters = null
-  if (Object.isFrozen(strings) && Object.isFrozen(raw)) {
-    let e = memoTable.get(strings)
-    if (e) {
-      lexer = e()
-    } else {
-      delimiters = []
-    }
-  }
-  if (!lexer) { lexer = makeLexer() }
+  const lexer = makeLexer()
 
   let delimiter = null
-  let needsSpace = false
-  for (let i = 0, n = raw.length; i < n; ++i) {
-    if (i !== 0) {
-      // The count of values must be 1 less than the surrounding
-      // chunks of literal text.
-      let value = values[i - 1]
-      if (delimiter) {
-        let valueStr
-        if (delimiter === '`') {
-          valueStr = mysql.escapeId(String(value))
-            .replace(/^`|`$/g, '')
-        } else {
-          valueStr = mysql.escape(String(value))
-          valueStr = valueStr.substring(1, valueStr.length - 1)
-        }
-        result += valueStr
-      } else {
-        let values = Array.isArray(value) ? value : [value]
-        for (let j = 0, nValues = values.length; j < nValues; ++j) {
-          if (j) {
-            result += ', '
-          }
-
-          let one = values[j]
-          let valueStr
-          if (one instanceof SqlFragment) {
-            if (!/(?:^|[\n\r\t ,(])$/.test(result)) {
-              result += ' '
-            }
-            valueStr = one.toString()
-            needsSpace = j + 1 === nValues
-          } else {
-            if (one instanceof Identifier) {
-              valueStr = mysql.escapeId(one.toString())
-            } else {
-              // TODO: nested arrays?
-              valueStr = mysql.format('?', one)
-            }
-          }
-          result += valueStr
-        }
-      }
-    }
+  for (let i = 0, len = raw.length; i < len; ++i) {
     let chunk = String(raw[i])
     if (delimiter === '`') {
       // Treat raw \` in an identifier literal as an ending delimiter.
       chunk = chunk.replace(/^([^\\`]|\\[\s\S])*\\`/, '$1`')
     }
-    let newDelimiter = lexer(chunk)
+    const newDelimiter = lexer(chunk)
     if (newDelimiter === '`' && !delimiter) {
       // Treat literal \` outside a string context as starting an
       // identifier literal
       chunk = chunk.replace(
-          /((?:^|[^\\])(?:\\\\)*)\\(`(?:[^`\\]|\\[\s\S])*)$/, '$1$2')
+        /((?:^|[^\\])(?:\\\\)*)\\(`(?:[^`\\]|\\[\s\S])*)$/, '$1$2')
     }
 
-    if (needsSpace) {
-      if (chunk.length && !/^[\n\r\t ,)]/.test(chunk)) {
-        result += ' '
+    chunks.push(chunk)
+    delimiters.push(newDelimiter)
+    delimiter = newDelimiter
+  }
+
+  return { delimiters, chunks, endDelimiter: delimiter }
+}
+
+/**
+ * Template tag function that contextually autoescapes values
+ * producing a SqlFragment.
+ */
+function sql (strings, ...values) {
+  const { raw } = strings
+
+  // We use a function that replays already parsed contexts where
+  // possible.  If we can't, we collect the contexts on the delimiters
+  // array so we can put them in the memoTable at the end.
+  let staticState = null
+  const canMemoize = Object.isFrozen(raw)
+  if (canMemoize) {
+    staticState = memoTable.get(raw)
+  }
+  if (!staticState) {
+    staticState = computeStatic(raw)
+    if (canMemoize) {
+      memoTable.set(raw, staticState)
+    }
+  }
+
+  // A buffer to accumulate the result.
+  const { delimiters, chunks, endDelimiter } = staticState
+  if (endDelimiter) {
+    throw new Error(`Unclosed quoted string: ${endDelimiter}`)
+  }
+
+  let [ result ] = chunks
+  for (let i = 1, len = raw.length; i < len; ++i) {
+    const chunk = chunks[i]
+    // The count of values must be 1 less than the surrounding
+    // chunks of literal text.
+    if (i !== 0) {
+      const delimiter = delimiters[i - 1]
+      const value = values[i - 1]
+      if (delimiter) {
+        result += escapeDelimitedValue(value, delimiter)
+      } else {
+        result = appendValue(result, value, chunk)
       }
-      needsSpace = false
     }
 
     result += chunk
-    delimiter = newDelimiter
-    if (delimiters) {
-      delimiters.push(newDelimiter)
-    }
   }
 
-  if (delimiter) {
-    throw new Error('Unclosed quoted string: ' + delimiter)
-  }
-
-  if (delimiters) {
-    memoTable.set(
-      strings,
-      () => {
-        let i = 0
-        return (_) => delimiters[i++]
-      })
-  }
   return new SqlFragment(result)
+}
+
+function escapeDelimitedValue (value, delimiter) {
+  if (delimiter === '`') {
+    return mysql.escapeId(String(value)).replace(/^`|`$/g, '')
+  }
+  const escaped = mysql.escape(String(value))
+  return escaped.substring(1, escaped.length - 1)
+}
+
+function appendValue (resultBefore, value, chunk) {
+  let needsSpace = false
+  let result = resultBefore
+  const valueArray = Array.isArray(value) ? value : [ value ]
+  for (let i = 0, nValues = valueArray.length; i < nValues; ++i) {
+    if (i) {
+      result += ', '
+    }
+
+    const one = valueArray[i]
+    let valueStr = null
+    if (one instanceof SqlFragment) {
+      if (!/(?:^|[\n\r\t ,\x28])$/.test(result)) {
+        result += ' '
+      }
+      valueStr = one.toString()
+      needsSpace = i + 1 === nValues
+    } else if (one instanceof Identifier) {
+      valueStr = mysql.escapeId(one.toString())
+    } else {
+      // If we need to handle nested arrays, we would recurse here.
+      valueStr = mysql.format('?', one)
+    }
+    result += valueStr
+  }
+
+  if (needsSpace && chunk && !/^[\n\r\t ,\x29]/.test(chunk)) {
+    result += ' '
+  }
+
+  return result
 }
 
 exports.Identifier = Identifier
