@@ -15,8 +15,10 @@
  * limitations under the License.
  */
 
-const expect = require('chai').expect
-const {describe, it} = require('mocha')
+/* eslint "id-length": off */
+
+const { expect } = require('chai')
+const { describe, it } = require('mocha')
 const sh = require('../index')
 
 /**
@@ -25,25 +27,25 @@ const sh = require('../index')
  * appends '_ERR_' as an end state if not.
  */
 function tokens (...chunks) {
-  let lexer = sh.makeLexer()
-  let out = []
-  for (let i = 0, n = chunks.length; i < n; ++i) {
+  const lexer = sh.makeLexer()
+  const out = []
+  for (let i = 0, len = chunks.length; i < len; ++i) {
     out.push(lexer(chunks[i])[0] || '_')
   }
   try {
     lexer(null)
-  } catch (e) {
+  } catch (exc) {
     out.push('_ERR_')
   }
   return out.join(',')
 }
 
 // Unwrap an ShFragment, failing if the result is not one.
-function uw (x) {
+function unwrap (x) {
   if (x instanceof sh.ShFragment) {
     return String(x)
   }
-  throw new Error('Expected ShFragment not ' + JSON.stringify(x))
+  throw new Error(`Expected ShFragment not ${JSON.stringify(x)}`)
 }
 
 // Run a test multiply  to exercise the memoizing code.
@@ -52,8 +54,7 @@ function runShTest (golden, test) {
     if (golden === '_ERR_') {
       expect(test).to.throw()
     } else {
-      let result = uw(test())
-      expect(result).to.equal(golden)
+      expect(unwrap(test())).to.equal(golden)
     }
   }
 }
@@ -101,11 +102,12 @@ describe('sh template tags', () => {
     })
     it('single quotes do not embed', () => {
       expect(`',',',',_`).to.equal(
-        tokens(' \' $(',
-               'foo) $((',
-               'bar))',
-               ' `',
-               ' ` # \' '))
+        tokens(
+          ' \' $(',
+          'foo) $((',
+          'bar))',
+          ' `',
+          ' ` # \' '))
     })
     it('unterminated comment', () => {
       expect('#,_ERR_').to.equal(
@@ -173,61 +175,64 @@ describe('sh template tags', () => {
     })
   })
 
-  const s = 'a"\'\n\\$b'
-  const n = 1234
-  const f = new sh.ShFragment(' frag ')
+  const str = 'a"\'\n\\$b'
+  const numb = 1234
+  const frag = new sh.ShFragment(' frag ')
   describe('template tag', () => {
     it('string in top level', () => {
-      runShTest(`echo 'a"'"'"'\n\\$b'`, () => sh`echo ${s}`)
+      runShTest(`echo 'a"'"'"'\n\\$b'`, () => sh`echo ${str}`)
     })
     it('number in top level', () => {
-      runShTest(`echo '1234'`, () => sh`echo ${n}`)
+      runShTest(`echo '1234'`, () => sh`echo ${numb}`)
     })
     it('fragment in top level', () => {
-      runShTest(`echo  frag `, () => sh`echo ${f}`)
+      runShTest(`echo  frag `, () => sh`echo ${frag}`)
     })
     it('string in dq', () => {
-      runShTest(`echo "a\\"'\n\\\\\\$b"`, () => sh`echo "${s}"`)
+      runShTest(`echo "a\\"'\n\\\\\\$b"`, () => sh`echo "${str}"`)
     })
     it('number in dq', () => {
-      runShTest(`echo "1234"`, () => sh`echo "${n}"`)
+      runShTest(`echo "1234"`, () => sh`echo "${numb}"`)
     })
     it('fragment in dq', () => {
-      runShTest(`echo " frag "`, () => sh`echo "${f}"`)
+      runShTest(`echo " frag "`, () => sh`echo "${frag}"`)
     })
     it('string in sq', () => {
-      runShTest(`echo 'a"'"'"'\n\\$b'`, () => sh`echo '${s}'`)
+      runShTest(`echo 'a"'"'"'\n\\$b'`, () => sh`echo '${str}'`)
     })
     it('number in sq', () => {
-      runShTest(`echo '1234'`, () => sh`echo '${n}'`)
+      runShTest(`echo '1234'`, () => sh`echo '${numb}'`)
     })
     it('fragment in sq', () => {
-      runShTest(`echo ' frag '`, () => sh`echo '${f}'`)
+      runShTest(`echo ' frag '`, () => sh`echo '${frag}'`)
     })
     it('string in embed', () => {
-      runShTest(`echo $(echo 'a"'"'"'\n\\$b')`,
-                () => sh`echo $(echo ${s})`)
+      runShTest(
+        `echo $(echo 'a"'"'"'\n\\$b')`,
+        () => sh`echo $(echo ${str})`)
     })
     it('number in embed', () => {
-      runShTest(`echo $(echo '1234')`,
-                () => sh`echo $(echo ${n})`)
+      runShTest(
+        `echo $(echo '1234')`,
+        () => sh`echo $(echo ${numb})`)
     })
     it('fragment in embed', () => {
-      runShTest(`echo $(echo  frag )`,
-                () => sh`echo $(echo ${f})`)
+      runShTest(
+        `echo $(echo  frag )`,
+        () => sh`echo $(echo ${frag})`)
     })
     it('hash ambig string', () => {
-      runShTest(`_ERR_`, () => sh`echo foo${s}#bar`)
+      runShTest(`_ERR_`, () => sh`echo foo${str}#bar`)
     })
     it('hash ambig fragment', () => {
-      runShTest(`_ERR_`, () => sh`echo foo${f}#bar`)
+      runShTest(`_ERR_`, () => sh`echo foo${frag}#bar`)
     })
     it('heredoc string', () => {
       runShTest(
         '\ncat <<EOF\na"\'\n\\$b\nEOF\n',
         () => sh`
 cat <<EOF
-${s}
+${str}
 EOF
 `)
     })
@@ -236,7 +241,7 @@ EOF
         '\ncat <<EOF\n1234\nEOF\n',
         () => sh`
 cat <<EOF
-${n}
+${numb}
 EOF
 `)
     })
@@ -245,7 +250,7 @@ EOF
         '\ncat <<EOF\n frag \nEOF\n',
         () => sh`
 cat <<EOF
-${f}
+${frag}
 EOF
 `)
     })
