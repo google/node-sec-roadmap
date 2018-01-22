@@ -19,7 +19,7 @@
 
 const { expect } = require('chai')
 const { describe, it } = require('mocha')
-const sh = require('../index')
+const { sh, ShFragment, makeLexer } = require('../index')
 
 /**
  * Feeds chunks to the lexer and concatenates contexts.
@@ -27,7 +27,7 @@ const sh = require('../index')
  * appends '_ERR_' as an end state if not.
  */
 function tokens (...chunks) {
-  const lexer = sh.makeLexer()
+  const lexer = makeLexer()
   const out = []
   for (let i = 0, len = chunks.length; i < len; ++i) {
     out.push(lexer(chunks[i])[0] || '_')
@@ -42,7 +42,7 @@ function tokens (...chunks) {
 
 // Unwrap an ShFragment, failing if the result is not one.
 function unwrap (x) {
-  if (x instanceof sh.ShFragment) {
+  if (x instanceof ShFragment) {
     return String(x)
   }
   throw new Error(`Expected ShFragment not ${JSON.stringify(x)}`)
@@ -177,7 +177,7 @@ describe('sh template tags', () => {
 
   const str = 'a"\'\n\\$b'
   const numb = 1234
-  const frag = new sh.ShFragment(' frag ')
+  const frag = new ShFragment(' frag ')
   describe('template tag', () => {
     it('string in top level', () => {
       runShTest(`echo 'a"'"'"'\n\\$b'`, () => sh`echo ${str}`)

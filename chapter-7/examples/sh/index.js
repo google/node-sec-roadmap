@@ -460,11 +460,12 @@ const shTagFunction = memoizedTagFunction(
   computeShellContexts,
   composeShellString)
 
-module.exports = shTagFunction
-module.exports.ShFragment = ShFragment
+exports.sh = shTagFunction
+exports.bash = shTagFunction
+exports.ShFragment = ShFragment
 
 if (global.it) {
   // Expose for testing.
   // Harmless if this leaks
-  module.exports.makeLexer = makeLexer
+  exports.makeLexer = makeLexer
 }
