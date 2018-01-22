@@ -16,6 +16,11 @@
  */
 
 const mysql = require('mysql')
+const {
+  memoizedTagFunction,
+  trimCommonWhitespaceFromLines,
+  TypedString
+} = require('template-tag-common')
 
 // A simple lexer for SQL.
 // SQL has many divergent dialects with subtly different
@@ -112,42 +117,13 @@ function makeLexer () {
 }
 
 /** A string wrapper that marks its content as a SQL identifier. */
-function Identifier (str) {
-  const content = String(str)
-  if (!content) {
-    throw new Error('blank content')
-  }
-  if (!(this instanceof Identifier) ||
-      Object.hasOwnProperty.call(this, 'content')) {
-    return new Identifier(content)
-  }
-  this.content = content
-}
-Identifier.prototype.toString = function toString () {
-  return String(this.content)
-}
+class Identifier extends TypedString {}
 
 /**
  * A string wrapper that marks its content as a series of
  * well-formed SQL tokens.
  */
-function SqlFragment (str) {
-  const content = String(str)
-  if (!content) {
-    throw new Error('blank content')
-  }
-  if (!(this instanceof SqlFragment) ||
-      Object.hasOwnProperty.call(this, 'content')) {
-    return new SqlFragment(content)
-  }
-  this.content = content
-}
-SqlFragment.prototype.toString = function toString () {
-  return String(this.content)
-}
-
-/** Avoid lexing every time we reuse the same hoisted strings object. */
-const memoTable = new WeakMap()
+class SqlFragment extends TypedString {}
 
 /**
  * Analyzes the static parts of the tag content.
@@ -156,7 +132,9 @@ const memoTable = new WeakMap()
  *     where delimiter is a contextual cue and chunk is
  *     the adjusted raw text.
  */
-function computeStatic (raw) {
+function computeStatic (strings) {
+  const { raw } = trimCommonWhitespaceFromLines(strings)
+
   const delimiters = []
   const chunks = []
 
@@ -182,37 +160,16 @@ function computeStatic (raw) {
     delimiter = newDelimiter
   }
 
-  return { delimiters, chunks, endDelimiter: delimiter }
+  if (delimiter) {
+    throw new Error(`Unclosed quoted string: ${delimiter}`)
+  }
+
+  return { raw, delimiters, chunks }
 }
 
-/**
- * Template tag function that contextually autoescapes values
- * producing a SqlFragment.
- */
-function sql (strings, ...values) {
-  const { raw } = strings
-
-  // We use a function that replays already parsed contexts where
-  // possible.  If we can't, we collect the contexts on the delimiters
-  // array so we can put them in the memoTable at the end.
-  let staticState = null
-  const canMemoize = Object.isFrozen(raw)
-  if (canMemoize) {
-    staticState = memoTable.get(raw)
-  }
-  if (!staticState) {
-    staticState = computeStatic(raw)
-    if (canMemoize) {
-      memoTable.set(raw, staticState)
-    }
-  }
-
-  // A buffer to accumulate the result.
-  const { delimiters, chunks, endDelimiter } = staticState
-  if (endDelimiter) {
-    throw new Error(`Unclosed quoted string: ${endDelimiter}`)
-  }
-
+function interpolateSqlIntoFragment (
+  { raw, delimiters, chunks }, strings, values) {
+  // A buffer to accumulate output.
   let [ result ] = chunks
   for (let i = 1, len = raw.length; i < len; ++i) {
     const chunk = chunks[i]
@@ -274,6 +231,12 @@ function appendValue (resultBefore, value, chunk) {
 
   return result
 }
+
+/**
+ * Template tag function that contextually autoescapes values
+ * producing a SqlFragment.
+ */
+const sql = memoizedTagFunction(computeStatic, interpolateSqlIntoFragment)
 
 exports.Identifier = Identifier
 exports.SqlFragment = SqlFragment

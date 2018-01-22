@@ -1,14 +1,27 @@
 {
   "name": "sh-template-tag",
-  "description": "demonstrates tagged templates for safely composing shell strings",
+  "description": "string template tags for safely composing shell strings",
+  "keywords": [
+    "shell",
+    "child_process",
+    "security",
+    "injection",
+    "template",
+    "template-tag",
+    "string-template",
+    "sec-roadmap",
+    "es6"
+  ],
   "version": "0.0.0",
-  "main": "index.js",
-  "dependencies": {},
-  "scripts": {
-    "test": "./node_modules/.bin/standard && ./node_modules/.bin/eslint . && ./node_modules/.bin/mocha"
-  },
   "author": "Mike Samuel",
   "license": "Apache-2.0",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "dependencies": {
+    "template-tag-common": ">=1.0.2"
+  },
   "devDependencies": {
     "chai": ">=4.1.2",
     "eslint": ">=4.15.0",
@@ -16,6 +29,9 @@
     "eslint-config-standard": "*",
     "mocha": ">=4.0.1",
     "standard": "*"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/standard && ./node_modules/.bin/eslint . && ./node_modules/.bin/mocha"
   },
   "eslintConfig": {
     "extends": [

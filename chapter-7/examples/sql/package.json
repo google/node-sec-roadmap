@@ -1,16 +1,27 @@
 {
   "name": "mysql-template-tag",
-  "description": "demonstrates tagged templates for safely composing SQL",
+  "description": "string template tags for safely composing SQL",
+  "keywords": [
+    "sql",
+    "security",
+    "injection",
+    "template",
+    "template-tag",
+    "string-template",
+    "sec-roadmap",
+    "es6"
+  ],
   "version": "0.0.0",
-  "main": "index.js",
-  "dependencies": {
-    "mysql": "2.15.0"
-  },
-  "scripts": {
-    "test": "./node_modules/.bin/standard && ./node_modules/.bin/eslint . && TZ=GMT ./node_modules/.bin/mocha"
-  },
   "author": "Mike Samuel",
   "license": "Apache-2.0",
+  "main": "index.js",
+  "files": [
+    "index.js"
+  ],
+  "dependencies": {
+    "mysql": "2.15.0",
+    "template-tag-common": ">=1.0.2"
+  },
   "devDependencies": {
     "chai": ">=4.1.2",
     "eslint": ">=4.15.0",
@@ -18,6 +29,9 @@
     "eslint-config-standard": "*",
     "mocha": ">=4.0.1",
     "standard": "*"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/standard && ./node_modules/.bin/eslint . && TZ=GMT ./node_modules/.bin/mocha"
   },
   "eslintConfig": {
     "extends": [

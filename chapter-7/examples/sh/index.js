@@ -25,6 +25,11 @@
  */
 
 const crypto = require('crypto')
+const {
+  memoizedTagFunction,
+  trimCommonWhitespaceFromLines,
+  TypedString
+} = require('template-tag-common')
 
 /** A regex chunk that matches only s. */
 function reEsc (str) {
@@ -323,81 +328,7 @@ function makeLexer () {
  * A string wrapper that marks its content as a series of
  * well-formed SQL tokens.
  */
-function ShFragment (str) {
-  const content = String(str)
-  if (!(this instanceof ShFragment) ||
-      Object.hasOwnProperty.call(this, 'content')) {
-    return new ShFragment(content)
-  }
-  this.content = content
-}
-ShFragment.prototype.toString = function toString () {
-  return String(this.content)
-}
-
-function isStringArray (arr) {
-  return Array.isArray(arr) &&
-    Array.prototype.every.call(arr, (elem) => typeof elem === 'string')
-}
-
-function requireValidTagInputs (staticStrings, dynamicValues) {
-  const { raw, length } = staticStrings
-  if (!isStringArray(staticStrings) || !isStringArray(raw) || length !== raw.length) {
-    throw fail`Invalid static strings`
-  }
-  if (dynamicValues.length + 1 !== length) {
-    throw fail`Too many or too few dynamic values: ${length} != ${dynamicValues.length}`
-  }
-}
-
-/**
- * Memoizes operations on the static portions so the per-use cost
- * of a tagged template literal is related to the complexity of handling
- * the dynamic values.
- *
- * @template R
- * @template T
- * @param {!function (Array.<string>): T} computeStaticHelper
- *   called when there is no entry for the
- *   frozen static strings object, and cached weakly thereafter.
- *   Receives a string of arrays with a {@code .raw} property that is
- *   a string array of the same length.
- * @param {!function (T, !Array.<string>, !Array.<*>): R} computeResultHelper
- *    a function that takes three parameters:
- * @return {!function (!Array.<string>, ...*): R}
- *    a template tag function that calls computeStaticHelper as needed
- *    on the static portion and returns the result of applying
- *    computeResultHelper.
- */
-function memoizedTagFunction (computeStaticHelper, computeResultHelper) {
-  const memoTable = new WeakMap()
-
-  return (staticStrings, ...dynamicValues) => {
-    requireValidTagInputs(staticStrings, dynamicValues)
-
-    let staticState = null
-    const canMemoize = Object.isFrozen(staticStrings) &&
-          Object.isFrozen(staticStrings.raw)
-    if (canMemoize) {
-      staticState = memoTable.get(staticStrings)
-    }
-    if (!staticState) {
-      try {
-        staticState = { pass: computeStaticHelper(staticStrings) }
-      } catch (exc) {
-        staticState = { fail: exc.message || 'Failure' }
-      }
-      if (canMemoize) {
-        memoTable.set(staticStrings, staticState)
-      }
-    }
-    if (staticState.fail) {
-      throw new Error(staticState.fail)
-    }
-
-    return computeResultHelper(staticState.pass, staticStrings, dynamicValues)
-  }
-}
+class ShFragment extends TypedString {}
 
 /** Applies the lexer to the static parts. */
 function computeShellContexts (staticStrings) {
@@ -405,7 +336,7 @@ function computeShellContexts (staticStrings) {
   // we don't need to rerun the lexer when a particalar tag use
   // is executed multiple times.
   const contexts = []
-  const { raw } = staticStrings
+  const { raw } = trimCommonWhitespaceFromLines(staticStrings)
 
   const lexer = makeLexer()
   for (let i = 0, len = raw.length; i < len; ++i) {
@@ -416,15 +347,15 @@ function computeShellContexts (staticStrings) {
   // Require valid end state.
   lexer(null)
 
-  return contexts
+  return { contexts, raw }
 }
 
 /**
  * Composes an ShFragment whose content consists of staticStrings
  * interleaved with untrusted appropriately escaped.
  */
-function composeShellString (contexts, staticStrings, untrusted) {
-  const trusted = staticStrings.raw
+function composeShellString ({ contexts, raw }, staticStrings, untrusted) {
+  const trusted = raw
   // A buffer onto which we accumulate output.
   const buf = [ trusted[0] ]
   let [ currentContext ] = contexts
