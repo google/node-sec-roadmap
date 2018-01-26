@@ -10,9 +10,9 @@
     "url": "https://github.com/mikesamuel"
   },
   "files": [
-    "*.md"
+    "www/**"
   ],
-  "main": "README.md",
+  "main": "www/index.html",
   "dependencies": {
     "gitbook": ">=3.2.3",
     "gitbook-cli": ">=2.3.2",
