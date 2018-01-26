@@ -86,6 +86,8 @@ the static parts, and then re-interleave them to produce the query.
 The example ([code][sql-code]) accompanying this chapter implements
 this idea by defining a `mysql.sql` function that parses the static
 parts to choose appropriate escapers for the dynamic parts.
+We have put together a [draft PR][mysql-PR] to integrate this into
+the *mysql* module.
 
 It also provides string wrappers, `Identifier` and `SqlFragment`, to
 make it easy to compose complex queries from simpler parts:
@@ -156,3 +158,4 @@ connection.query('SELECT * FROM T WHERE x = "?"', x, callback)  // Subtly broken
 [prepared statements]: https://www.owasp.org/index.php/SQL_Injection_Prevention_Cheat_Sheet#Defense_Option_1:_Prepared_Statements_.28with_Parameterized_Queries.29
 [tagged template literal]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals
 [sql-code]: https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sql
+[mysql-PR]: https://github.com/mysqljs/mysql/pull/1926

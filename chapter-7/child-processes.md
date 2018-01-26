@@ -80,4 +80,4 @@ that effort spent hardening command line tools will yield fruit.
 [cp.spawn]: https://nodejs.org/api/child_process.html#child_process_child_process_spawn_command_args_options
 [SHP]: ../chapter-1/threat-SHP.md
 [BOF]: ../chapter-1/threat-BOF.md
-[sh-code]: https://github.com/google/node-sec-roadmap/tree/master/chapter-7/examples/sh
+[sh-code]: https://github.com/mikesamuel/sh-template-tag
