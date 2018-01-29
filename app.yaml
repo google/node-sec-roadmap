@@ -58,3 +58,10 @@ handlers:
   upload: www/(.*[.](ico|dot|eot|otf|png|ttf|woff|woff2|pdf))$
   secure: always
   expiration: 30m
+
+skip_files:
+- ^(.*/)?#.*#$
+- ^(.*/)?.*~$
+- ^(.*/)?.*\.py[co]$
+- ^(.*/)?.*/RCS/.*$
+- ^(.*/)?\.(?!well-known(?:/|$)).*$
