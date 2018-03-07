@@ -10,3 +10,4 @@
 Special thanks for feedback and criticism:
 
 * [Matteo Collina](https://github.com/mcollina)
+* [Rich Trott](https://github.com/Trott)
