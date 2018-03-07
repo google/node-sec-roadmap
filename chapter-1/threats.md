@@ -120,6 +120,7 @@ violation of *integrity*.  Specifically:
 [BOF]: threat-BOF.md
 [CRY]: threat-CRY.md
 [DEX]: threat-DEX.md
+[DOS]: threat-DOS.md
 [EXF]: threat-EXF.md
 [LQC]: threat-LQC.md
 [MTP]: threat-MTP.md
