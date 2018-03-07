@@ -36,7 +36,8 @@ parsed.  Let's consider two use cases:
    download data into a spreadsheet, they might use Mathjs to parse
    user-supplied arithmetic expressions ([docs][more_secure_eval])
    instead of trying to check that an input is safe to `eval` via
-   `RegExp`s.  It is not without risk ([advisory][adv552]) though.
+   `RegExp`s.  It is not without risk ([advisory][adv552])
+   though [^1].
 
 These two uses of code generators fall at either end of a spectrum.
 The uses of Pug seem static, all the information is available before
@@ -54,8 +55,12 @@ decisions short of a blanket ban, but turning off `eval` before
 accepting untrusted inputs is still the most reliable way to prevent
 attackers from using `eval` against you.
 
+[^1]: Since this writing, [Mathjs got rid of all uses of `eval`][no-eval-issue]
+
+
 [`WebAssembly.compile`]: http://webassembly.org/docs/js/#webassemblycompile
 [Pug]: https://pugjs.org/
 [Mathjs]: http://mathjs.org/
 [more_secure_eval]: http://mathjs.org/examples/advanced/more_secure_eval.js.html
 [adv552]: https://nodesecurity.io/advisories/552
+[no-eval-issue]: https://github.com/josdejong/mathjs/issues/1019#issuecomment-367289278
