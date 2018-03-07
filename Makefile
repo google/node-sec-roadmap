@@ -36,7 +36,7 @@ ROOT_DIR:=$(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 
 # External dependency used to detect dead links
 ifeq ($(HTML_PROOFER),)
-  HTML_PROOFER:=${HOME}/.gem/ruby/2.4.0/gems/html-proofer-3.7.4/bin/htmlproofer
+  HTML_PROOFER:=${HOME}/.gem/ruby/2.4.0/gems/html-proofer-3.8.0/bin/htmlproofer
   ifeq (,$(wildcard ${HTML_PROOFER}))
 	HTML_PROOFER:=/bin/echo
   endif
