@@ -48,6 +48,9 @@ client-side JavaScript.  For example,
   unclear how widespread these are in production or how
   [susceptible][thread corner cases] these are to memory corruption
   or exploitable race conditions.
+* Client-side, the browser halts all scripts in a document when a
+  single event loop cycle **runs too long**.
+  Node.js has few ways to manage runaway computations on the server.
 
 The threat environment for server-side JavaScript is much closer to
 that for any other server-side framework than JavaScript in the
@@ -75,6 +78,7 @@ columns, and link to the discussion.
 | [BOF][]   | Buffer overflow.                                                                      | Low       | High     | [ovrsi][m-os]               |
 | [CRY][]   | Misuse of crypto leads to poor access-control decisions or data leaks.                | Medium    | Medium   | [ovrsi][m-os]               |
 | [DEX][]   | Poor developer experience slows or prevents release of features.                      | ?         | ?        | [dynam][m-dy] [ovrsi][m-os] |
+| [DOS][]   | Denial of service                                                                     | Medium    | Low-Med  | TBD                         |
 | [EXF][]   | Exfiltration of data, e.g. by exploiting reflection to serialize more than intended.  | Med-High  | Low-Med  | [ovrsi][m-os]               |
 | [LQC][]   | Using low quality dependencies leads to exploit                                       | Medium    | Low-Med  | [kdeps][m-kd] [ovrsi][m-os] |
 | [MTP][]   | Theft of commit rights or MITM causes `npm install` to fetch malicious code.          | Low       | Med-High | [kdeps][m-kd] [cdeps][m-cd] |
@@ -116,6 +120,7 @@ violation of *integrity*.  Specifically:
 [BOF]: threat-BOF.md
 [CRY]: threat-CRY.md
 [DEX]: threat-DEX.md
+[DOS]: threat-DOS.md
 [EXF]: threat-EXF.md
 [LQC]: threat-LQC.md
 [MTP]: threat-MTP.md

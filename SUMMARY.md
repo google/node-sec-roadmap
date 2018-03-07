@@ -5,6 +5,7 @@
   *  [Buffer Overflow](chapter-1/threat-BOF.md)
   *  [Weak Crypto](chapter-1/threat-CRY.md)
   *  [Poor Developer Experience](chapter-1/threat-DEX.md)
+  *  [Denial of Service](chapter-1/threat-DOS.md)
   *  [Exfiltration of Data](chapter-1/threat-EXF.md)
   *  [Low Quality Code](chapter-1/threat-LQC.md)
   *  [Malicious Third-Party Code](chapter-1/threat-MTP.md)
