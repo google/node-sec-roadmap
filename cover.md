@@ -10,9 +10,9 @@ consistent manner.
 
 This is not the opinion of any organization.  It is the considered
 opinion of
-[some computer security professionals and node enthusiasts][contributors]
+[some computer security professionals and Node.js enthusiasts][contributors]
 who have worked to make it easier to write secure, robust software on
-other platforms; who like much about Node.js; and who would like to
+other platforms; who like a lot about Node.js; and who would like to
 help make it better.
 
 Our intended audience is Node.js library and infrastructure
