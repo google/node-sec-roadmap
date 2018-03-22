@@ -18,16 +18,22 @@ problem and several solutions, none of which are ideal.
 
 Many organizations use tools to manage a local replica.
 
+*  [npm Enterprise][] is a full-featured single-tenant implementation
+   of the npm registry and website, created by npm, Inc.
+*  npm can be [configured to use a different registry][] by setting
+   the `registry` npm configuration option.  Once dependencies have
+   been cached locally the first time, the `--offline` npm option will
+   prevent fetching anything new from the network.
 *  [Artifactory][] is a language agnostic dependency manager that
    supports Node.
 *  [Sinopia][] is a Node specific repository server.
 *  [Verdaccio][] is fork of Sinopia.
-*  [Yarn][] is a package manager backed by the same `registry.npmjs`
-   but which can be pointed at an [offline mirror][].
-   The offline mirror can have multiple tarballs per module to deal
-   with architecture specific builds.  Its `--offline` mode prevents
-   falling back to central, though does not prevent network fetches
-   by module scripts.
+*  [Yarn][] is a package manager backed by the same
+   <https://registry.npmjs.org> but which can be pointed at an
+   [offline mirror][].  The offline mirror can have multiple tarballs
+   per module to deal with architecture specific builds.  Its
+   `--offline` mode prevents falling back to central, though does not
+   prevent network fetches by module scripts.
 
 Node's security working group has a [process][security-wg process] for
 managing vulnerabilities in third-party code.
@@ -228,6 +234,8 @@ a specific module.
 
 [James Shore]: https://www.letscodejavascript.com/v3/blog/2014/03/the_npm_debacle
 [package locks]: https://docs.npmjs.com/files/package-lock.json
+[npm Enterprise]: https://www.npmjs.com/enterprise
+[configured to use a different registry]: https://docs.npmjs.com/misc/config
 [Artifactory]: https://www.jfrog.com/confluence/display/RTF/Npm+Registry#NpmRegistry-AdvancedConfiguration
 [Sinopia]: https://www.npmjs.com/package/sinopia#override-public-packages
 [Verdaccio]: https://github.com/verdaccio/verdaccio/blob/66b2175584e29587be0fd7979ea9f9c73b08b8e9/docs/use-cases.md#override-public-packages
