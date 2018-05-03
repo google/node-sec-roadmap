@@ -41,8 +41,9 @@ committers use two factors, then there is no single password that can
 compromise the system.
 
 The frequency of malicious code vulnerabilities affecting Node.js is
-probably roughly the same as that for other public module
-repositories.
+probably roughly the same as that for other public module repositories.
+The npm repo has been a target in the past [1][getcookies-disclosure]
+[2][crossenv-typosquat-disclosure].
 
 The [npm Blog][crossenv-typosquat-disclosure] explains what to do if
 you believe you have found malicious code:
@@ -65,8 +66,9 @@ you believe you have found malicious code:
 [github-second-factor]: https://help.github.com/articles/about-two-factor-authentication/
 [bower-depr]: https://bower.io/blog/2017/how-to-migrate-away-from-bower/
 [dimnie]: https://researchcenter.paloaltonetworks.com/2017/03/unit42-dimnie-hiding-plain-sight/
-[unsigned commits]: https://nvisium.com/blog/2017/06/21/securing-github-commits-with-gpg-signing/
+[unsigned commits]: https://nvisium.com/resources/blog/2017/06/21/securing-github-commits-with-gpg-signing.html
 [npm profile]: https://docs.npmjs.com/cli/profile
 [saccone]: https://www.kb.cert.org/CERT_WEB/services/vul-notes.nsf/6eacfaeab94596f5852569290066a50b/018dbb99def6980185257f820013f175/$FILE/npmwormdisclosure.pdf
 [npm auth-and-writes]: https://docs.npmjs.com/getting-started/using-two-factor-authentication
+[getcookies-disclosure]: https://blog.npmjs.org/post/173526807575/reported-malicious-module-getcookies
 [crossenv-typosquat-disclosure]: http://blog.npmjs.org/post/163723642530/crossenv-malware-on-the-npm-registry
